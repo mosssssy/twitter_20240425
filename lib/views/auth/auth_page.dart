@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
+import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/views/auth/components/auth_text_form_field.dart';
 import 'package:twitter_20240425/views/auth/password_reminder_page.dart';
 
@@ -65,6 +67,18 @@ class AuthPage extends StatelessWidget {
                           .user;
                       if (user != null) {
                         print('ユーザーを登録しました');
+                        // FirebaseStore に userドキュメントを作成
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .set({
+                          'userName': '',
+                          'imageUrl': '',
+                          'userId': '',
+                          'profileIntroduction': '',
+                          'createdAt': Timestamp.now(),
+                          'updatedAt': Timestamp.now(),
+                        });
                         AlertDialog(
                           title: const Text("会員登録成功"),
                           content: const Text('ユーザーを登録しました'),
@@ -124,6 +138,12 @@ class AuthPage extends StatelessWidget {
                           .user;
                       if (user != null) {
                         print('ログイン成功');
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({
+                          'updatedAt': Timestamp.now(),
+                        });
                       } else {
                         print('ログイン失敗');
                         showCloseOnlyDialog(

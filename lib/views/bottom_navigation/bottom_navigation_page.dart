@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:twitter_20240425/views/my_done_task_list/my_done_task_list_page.dart';
 import 'package:twitter_20240425/views/my_page/my_page.dart';
-import 'package:twitter_20240425/views/todo_all_list/todo_all_list_page.dart';
+import 'package:twitter_20240425/views/all_tweet_list/todo_all_list_page.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({super.key});
@@ -13,10 +12,9 @@ class BottomNavigationPage extends StatefulWidget {
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   List children = [
     const TodoAllListPage(),
-    const MyDoneTaskListPage(),
     const MyPage(),
   ];
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +30,6 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
             label: 'All',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check),
-            label: 'Done',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
