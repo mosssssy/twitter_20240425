@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/views/my_page/my_page.dart';
-import 'package:twitter_20240425/views/all_tweet_list/todo_all_list_page.dart';
+import 'package:twitter_20240425/views/all_tweet_list/all_tweet_list_page.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({super.key});
@@ -14,7 +14,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     const TodoAllListPage(),
     const MyPage(),
   ];
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {

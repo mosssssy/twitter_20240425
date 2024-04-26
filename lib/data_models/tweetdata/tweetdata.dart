@@ -10,6 +10,7 @@ class TweetData with _$TweetData {
     required String userId,
     required String tweetContent,
     required String addedImageUrl,
+    required String tweetId,
     @TimestampConverter() required Timestamp createdAt,
     @TimestampConverter() required Timestamp updatedAt,
   }) = _TweetData;

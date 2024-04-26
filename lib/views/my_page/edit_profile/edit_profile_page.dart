@@ -15,9 +15,11 @@ class EditProfilePage extends StatefulWidget {
     super.key,
     required this.userName,
     required this.imageUrl,
+    required this.profileIntroduction,
   });
   final String userName;
   String imageUrl;
+  final String profileIntroduction;
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -34,6 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     userNameController.text = widget.userName;
+    profileIntroductionController.text = widget.profileIntroduction;
     Widget previewWidget;
     if (image != null) {
       previewWidget = ClipOval(
@@ -75,6 +78,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ),
           backgroundColor: Colors.deepPurple,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -143,7 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           },
                           decoration:
                               const InputDecoration(label: Text('ユーザーネーム'))),
-                      MarginSizedBox.bigHeightMargin,
+                      MarginSizedBox.mediumHeightMargin,
                       TextFormField(
                           controller: profileIntroductionController,
                           validator: (value) {
@@ -154,6 +158,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           },
                           decoration:
                               const InputDecoration(label: Text('プロフィール文章'))),
+                      MarginSizedBox.mediumHeightMargin,
                       BlueButton(
                         buttonText: 'プロフィールを変更する',
                         onBlueButtonPressed: () async {

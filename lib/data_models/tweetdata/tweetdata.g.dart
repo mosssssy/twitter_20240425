@@ -11,6 +11,7 @@ _$TweetDataImpl _$$TweetDataImplFromJson(Map<String, dynamic> json) =>
       userId: json['userId'] as String,
       tweetContent: json['tweetContent'] as String,
       addedImageUrl: json['addedImageUrl'] as String,
+      tweetId: json['tweetId'] as String,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       updatedAt:
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$TweetDataImplToJson(_$TweetDataImpl instance) =>
       'userId': instance.userId,
       'tweetContent': instance.tweetContent,
       'addedImageUrl': instance.addedImageUrl,
+      'tweetId': instance.tweetId,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'updatedAt': const TimestampConverter().toJson(instance.updatedAt),
     };

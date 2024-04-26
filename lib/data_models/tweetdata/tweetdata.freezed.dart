@@ -23,6 +23,7 @@ mixin _$TweetData {
   String get userId => throw _privateConstructorUsedError;
   String get tweetContent => throw _privateConstructorUsedError;
   String get addedImageUrl => throw _privateConstructorUsedError;
+  String get tweetId => throw _privateConstructorUsedError;
   @TimestampConverter()
   Timestamp get createdAt => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -43,6 +44,7 @@ abstract class $TweetDataCopyWith<$Res> {
       {String userId,
       String tweetContent,
       String addedImageUrl,
+      String tweetId,
       @TimestampConverter() Timestamp createdAt,
       @TimestampConverter() Timestamp updatedAt});
 }
@@ -63,6 +65,7 @@ class _$TweetDataCopyWithImpl<$Res, $Val extends TweetData>
     Object? userId = null,
     Object? tweetContent = null,
     Object? addedImageUrl = null,
+    Object? tweetId = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -78,6 +81,10 @@ class _$TweetDataCopyWithImpl<$Res, $Val extends TweetData>
       addedImageUrl: null == addedImageUrl
           ? _value.addedImageUrl
           : addedImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      tweetId: null == tweetId
+          ? _value.tweetId
+          : tweetId // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -103,6 +110,7 @@ abstract class _$$TweetDataImplCopyWith<$Res>
       {String userId,
       String tweetContent,
       String addedImageUrl,
+      String tweetId,
       @TimestampConverter() Timestamp createdAt,
       @TimestampConverter() Timestamp updatedAt});
 }
@@ -121,6 +129,7 @@ class __$$TweetDataImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? tweetContent = null,
     Object? addedImageUrl = null,
+    Object? tweetId = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -136,6 +145,10 @@ class __$$TweetDataImplCopyWithImpl<$Res>
       addedImageUrl: null == addedImageUrl
           ? _value.addedImageUrl
           : addedImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      tweetId: null == tweetId
+          ? _value.tweetId
+          : tweetId // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -156,6 +169,7 @@ class _$TweetDataImpl implements _TweetData {
       {required this.userId,
       required this.tweetContent,
       required this.addedImageUrl,
+      required this.tweetId,
       @TimestampConverter() required this.createdAt,
       @TimestampConverter() required this.updatedAt});
 
@@ -169,6 +183,8 @@ class _$TweetDataImpl implements _TweetData {
   @override
   final String addedImageUrl;
   @override
+  final String tweetId;
+  @override
   @TimestampConverter()
   final Timestamp createdAt;
   @override
@@ -177,7 +193,7 @@ class _$TweetDataImpl implements _TweetData {
 
   @override
   String toString() {
-    return 'TweetData(userId: $userId, tweetContent: $tweetContent, addedImageUrl: $addedImageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TweetData(userId: $userId, tweetContent: $tweetContent, addedImageUrl: $addedImageUrl, tweetId: $tweetId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -190,6 +206,7 @@ class _$TweetDataImpl implements _TweetData {
                 other.tweetContent == tweetContent) &&
             (identical(other.addedImageUrl, addedImageUrl) ||
                 other.addedImageUrl == addedImageUrl) &&
+            (identical(other.tweetId, tweetId) || other.tweetId == tweetId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -198,8 +215,8 @@ class _$TweetDataImpl implements _TweetData {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, userId, tweetContent, addedImageUrl, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, userId, tweetContent,
+      addedImageUrl, tweetId, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -220,6 +237,7 @@ abstract class _TweetData implements TweetData {
           {required final String userId,
           required final String tweetContent,
           required final String addedImageUrl,
+          required final String tweetId,
           @TimestampConverter() required final Timestamp createdAt,
           @TimestampConverter() required final Timestamp updatedAt}) =
       _$TweetDataImpl;
@@ -233,6 +251,8 @@ abstract class _TweetData implements TweetData {
   String get tweetContent;
   @override
   String get addedImageUrl;
+  @override
+  String get tweetId;
   @override
   @TimestampConverter()
   Timestamp get createdAt;
