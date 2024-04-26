@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/confirm_dialog.dart';
+import 'package:twitter_20240425/common_widget/custom_font_size.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
@@ -84,9 +85,10 @@ class MyPage extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
+                    MarginSizedBox.smallHeightMargin,
                     Text(
                       userData.userName,
-                      style: const TextStyle(),
+                      style: CustomFontSize.mediumFontSize,
                     ),
                     MarginSizedBox.smallHeightMargin,
                     Text(myUserEmail ?? ''),
