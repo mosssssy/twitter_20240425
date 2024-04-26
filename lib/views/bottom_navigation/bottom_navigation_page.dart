@@ -14,7 +14,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     const TodoAllListPage(),
     const MyPage(),
   ];
-  int currentIndex = 1;
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
