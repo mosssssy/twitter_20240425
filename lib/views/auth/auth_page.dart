@@ -1,9 +1,10 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
-import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/views/auth/components/auth_text_form_field.dart';
 import 'package:twitter_20240425/views/auth/password_reminder_page.dart';
 

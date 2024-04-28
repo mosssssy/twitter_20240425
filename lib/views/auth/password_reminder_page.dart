@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
@@ -49,9 +51,7 @@ class PasswordReminderPage extends StatelessWidget {
                     // メール/パスワードでログイン
                     await FirebaseAuth.instance
                         .sendPasswordResetEmail(email: emailController.text);
-                    print("パスワードリセット用のメールを送信しました");
                   } on FirebaseAuthException catch (error) {
-                    print(error.code);
                     if (error.code == 'invalid-email') {
                       showCloseOnlyDialog(
                           context, 'メールアドレスの形式ではありません', 'メール送信失敗');

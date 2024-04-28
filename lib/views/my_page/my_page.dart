@@ -33,7 +33,6 @@ class MyPage extends StatelessWidget {
           IconButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
-                print('ログアウトしました');
               },
               icon: const Icon(
                 Icons.logout,
@@ -50,7 +49,6 @@ class MyPage extends StatelessWidget {
             .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          print(snapshot);
           if (snapshot.hasData == false || snapshot.data == null) {
             return const SizedBox.shrink();
           }
@@ -295,7 +293,10 @@ class MyPage extends StatelessWidget {
                               Navigator.pop(context);
                             } catch (e) {
                               showCloseOnlyDialog(
-                                  context, e.toString(), 'メール送信失敗');
+                                  // ignore: use_build_context_synchronously
+                                  context,
+                                  e.toString(),
+                                  'メール送信失敗');
                             }
                           },
                           text: 'パスワード再設定メールを送信しますか？',
@@ -331,7 +332,6 @@ class MyPage extends StatelessWidget {
                       ),
                       onTap: () async {
                         await FirebaseAuth.instance.signOut();
-                        print('ログアウトしました');
                       },
                     ),
                   ],

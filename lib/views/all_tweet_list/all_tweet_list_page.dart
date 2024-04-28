@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:twitter_20240425/common_widget/confirm_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:twitter_20240425/views/all_tweet_list/add_tweet/add_tweet_page.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoAllListPage extends StatelessWidget {
   const TodoAllListPage({super.key});
@@ -135,13 +132,11 @@ class TodoAllListPage extends StatelessWidget {
                                   (tweetData.addedImageUrl.isNotEmpty)
                                       ? Row(
                                           children: [
-                                            Container(
-                                              child: Image.network(
-                                                tweetData.addedImageUrl,
-                                                width: 75,
-                                                height: 75,
-                                                fit: BoxFit.cover,
-                                              ),
+                                            Image.network(
+                                              tweetData.addedImageUrl,
+                                              width: 75,
+                                              height: 75,
+                                              fit: BoxFit.cover,
                                             ),
                                             MarginSizedBox.smallWidthMargin,
                                           ],

@@ -1,17 +1,12 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:uuid/uuid.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
-import 'package:twitter_20240425/data_models/userdata/userdata.dart';
-import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/views/my_page/components/blue_button.dart';
 
 class AddTweetPage extends StatefulWidget {
@@ -30,13 +25,11 @@ class _AddTweetPageState extends State<AddTweetPage> {
   Widget build(BuildContext context) {
     Widget previewWidget;
     if (image != null) {
-      previewWidget = Container(
-        child: Image.file(
-          image!,
-          width: 200,
-          height: 200,
-          fit: BoxFit.cover,
-        ),
+      previewWidget = Image.file(
+        image!,
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
       );
     } else {
       previewWidget = Container(
@@ -88,7 +81,7 @@ class _AddTweetPageState extends State<AddTweetPage> {
                     return;
                   }
                   final String uuid = const Uuid().v4();
-                  final addTweetData = FirebaseFirestore.instance
+                  FirebaseFirestore.instance
                       .collection('tweets')
                       .doc(uuid)
                       .set({
@@ -102,7 +95,7 @@ class _AddTweetPageState extends State<AddTweetPage> {
                   if (image != null) {
                     ///ストレージに選択した画像をアップロードする
                     final storedImage = await FirebaseStorage.instance
-                        .ref('addedImage/${uuid}')
+                        .ref('addedImage/$uuid')
                         .putFile(image!);
                     //ストレージにあげた画像のURLを取得する
                     final String addedImageUrl =
@@ -114,7 +107,7 @@ class _AddTweetPageState extends State<AddTweetPage> {
                       'addedImageUrl': addedImageUrl,
                     });
                   }
-                  ;
+
                   showToast('ツイートが追加されました');
                   tweetContentController.clear();
                 },
