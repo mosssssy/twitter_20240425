@@ -11,7 +11,7 @@ class EditEmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String myUserEmail = FirebaseAuth.instance.currentUser!.email!;
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> formkey = GlobalKey<FormState>();
     final TextEditingController emailController = TextEditingController();
     final TextEditingController newEmailController = TextEditingController();
     final TextEditingController passController = TextEditingController();
@@ -29,7 +29,7 @@ class EditEmailPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
-          key: formKey,
+          key: formkey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -82,21 +82,23 @@ class EditEmailPage extends StatelessWidget {
                   } on FirebaseAuthException catch (error) {
                     print(error.code);
                     if (error.code == 'invalid-email') {
-                      print('メールアドレスの形式ではありません');
                       showCloseOnlyDialog(
                           context, 'メールアドレスの形式ではありません', '失敗しました');
-                    }
-                    if (error.code == 'email-already-in-use') {
-                      print('既に使われているメールアドレスです');
+                    } else if (error.code == 'email-already-in-use') {
                       showCloseOnlyDialog(
                           context, '既に使われているメールアドレスです', '失敗しました');
-                    }
-                    if (error.code == 'weak-password') {
-                      print('パスワードが弱すぎます');
-                      showCloseOnlyDialog(context, 'パスワードが弱すぎます', '失敗しました');
+                    } else if (error.code == 'wrong-password') {
+                      showCloseOnlyDialog(context, 'パスワードが間違っています', '失敗しました');
+                    } else if (error.code == 'invalid-credential') {
+                      showCloseOnlyDialog(
+                          context, '無効なメールアドレスまたはパスワードです', '失敗しました');
+                    } else {
+                      showCloseOnlyDialog(
+                          context, '予期せぬエラーが出ました。$error', '失敗しました');
                     }
                   } catch (error) {
-                    showCloseOnlyDialog(context, error.toString(), '失敗しました');
+                    showCloseOnlyDialog(
+                        context, '予期せぬエラーが出ました。$error', '失敗しました');
                   }
                 },
               ),
