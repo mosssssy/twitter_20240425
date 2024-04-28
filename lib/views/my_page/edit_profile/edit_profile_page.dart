@@ -140,7 +140,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       MarginSizedBox.mediumHeightMargin,
                       TextFormField(
                           controller: userNameController,
-                          maxLength: 12,
                           validator: (value) {
                             if (value == null || value == '') {
                               return '未入力です';

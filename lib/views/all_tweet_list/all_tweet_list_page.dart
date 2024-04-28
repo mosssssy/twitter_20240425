@@ -89,7 +89,11 @@ class TodoAllListPage extends StatelessWidget {
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                            title: Text(postUser.userName),
+                            title: Text(
+                              postUser.userName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                             subtitle: Row(
                               children: [
                                 Text(
