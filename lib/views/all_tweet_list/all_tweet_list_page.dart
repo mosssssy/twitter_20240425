@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:twitter_20240425/common_widget/confirm_dialog.dart';
@@ -129,7 +130,26 @@ class TodoAllListPage extends StatelessWidget {
                             // ignore: sort_child_properties_last
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: Text(tweetData.tweetContent),
+                              child: Row(
+                                children: [
+                                  (tweetData.addedImageUrl.isNotEmpty)
+                                      ? Row(
+                                          children: [
+                                            Container(
+                                              child: Image.network(
+                                                tweetData.addedImageUrl,
+                                                width: 75,
+                                                height: 75,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            MarginSizedBox.smallWidthMargin,
+                                          ],
+                                        )
+                                      : const SizedBox.shrink(),
+                                  Expanded(child: Text(tweetData.tweetContent)),
+                                ],
+                              ),
                             ),
                             width: double.infinity,
                             color: Colors.white,

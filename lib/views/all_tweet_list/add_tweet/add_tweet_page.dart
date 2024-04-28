@@ -1,20 +1,51 @@
+// ignore_for_file: unused_local_variable
+
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:uuid/uuid.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
+import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/views/my_page/components/blue_button.dart';
 
-class AddTweetPage extends StatelessWidget {
+class AddTweetPage extends StatefulWidget {
   const AddTweetPage({super.key});
 
   @override
+  State<AddTweetPage> createState() => _AddTweetPageState();
+}
+
+class _AddTweetPageState extends State<AddTweetPage> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController tweetContentController = TextEditingController();
+  File? image;
+
+  @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final TextEditingController tweetContentController =
-        TextEditingController();
+    Widget previewWidget;
+    if (image != null) {
+      previewWidget = Container(
+        child: Image.file(
+          image!,
+          width: 200,
+          height: 200,
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      previewWidget = Container(
+        width: 200,
+        height: 200,
+        color: Colors.grey,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ツイートする'),
@@ -39,6 +70,16 @@ class AddTweetPage extends StatelessWidget {
                   label: Text('ツイート'),
                 ),
               ),
+              MarginSizedBox.smallHeightMargin,
+              BlueButton(
+                buttonText: '画像を選択する',
+                onBlueButtonPressed: () {
+                  //Image Pickerをインスタンス化
+                  getImageFromGallery();
+                },
+              ),
+              MarginSizedBox.smallHeightMargin,
+              previewWidget,
               MarginSizedBox.bigHeightMargin,
               BlueButton(
                 buttonText: 'ツイートを追加する',
@@ -47,18 +88,33 @@ class AddTweetPage extends StatelessWidget {
                     return;
                   }
                   final String uuid = const Uuid().v4();
-                  TweetData addTweetData = TweetData(
-                    tweetContent: tweetContentController.text,
-                    userId: FirebaseAuth.instance.currentUser!.uid,
-                    createdAt: Timestamp.now(),
-                    updatedAt: Timestamp.now(),
-                    addedImageUrl: "",
-                    tweetId: uuid,
-                  );
-                  await FirebaseFirestore.instance
+                  final addTweetData = FirebaseFirestore.instance
                       .collection('tweets')
                       .doc(uuid)
-                      .set(addTweetData.toJson());
+                      .set({
+                    'tweetContent': tweetContentController.text,
+                    'userId': FirebaseAuth.instance.currentUser!.uid,
+                    'createdAt': Timestamp.now(),
+                    'updatedAt': Timestamp.now(),
+                    'addedImageUrl': "",
+                    'tweetId': uuid,
+                  });
+                  if (image != null) {
+                    ///ストレージに選択した画像をアップロードする
+                    final storedImage = await FirebaseStorage.instance
+                        .ref('addedImage/${uuid}')
+                        .putFile(image!);
+                    //ストレージにあげた画像のURLを取得する
+                    final String addedImageUrl =
+                        await storedImage.ref.getDownloadURL();
+                    await FirebaseFirestore.instance
+                        .collection('tweets')
+                        .doc(uuid)
+                        .update({
+                      'addedImageUrl': addedImageUrl,
+                    });
+                  }
+                  ;
                   showToast('ツイートが追加されました');
                   tweetContentController.clear();
                 },
@@ -68,5 +124,17 @@ class AddTweetPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> getImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery); //アルバムから画像を取得
+
+    if (pickedFile != null) {
+      setState(() {
+        image = File(pickedFile.path);
+      });
+    }
   }
 }
