@@ -41,7 +41,12 @@ class _AddTweetPageState extends State<AddTweetPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ツイートする'),
+        title: const Text(
+          'ツイートする',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),

@@ -27,6 +27,7 @@ class EditEmailPage extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
