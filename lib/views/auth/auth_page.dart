@@ -150,15 +150,24 @@ class AuthPage extends StatelessWidget {
                             context, '予期せぬエラーが出ました。\n再度やり直してください。', 'ログイン失敗');
                       }
                     } on FirebaseAuthException catch (error) {
+                      print(error.code);
                       if (error.code == 'user-not-found') {
                         showCloseOnlyDialog(context, 'ユーザーが見つかりません', 'ログイン失敗');
                       } else if (error.code == 'invalid-email') {
                         showCloseOnlyDialog(
                             context, 'メールアドレスの形式ではありません', 'ログイン失敗');
+                      } else if (error.code == 'user-disabled') {
+                        showCloseOnlyDialog(
+                            context, 'このアカウントは無効化されています', 'ログイン失敗');
+                      } else if (error.code == 'wrong-password') {
+                        showCloseOnlyDialog(context, 'パスワードが間違っています', 'ログイン失敗');
+                      } else if (error.code == 'invalid-credential') {
+                        showCloseOnlyDialog(
+                            context, '無効なメールアドレスまたはパスワードです', 'ログイン失敗');
                       }
                     } catch (error) {
                       showCloseOnlyDialog(
-                          context, '予期せぬエラーがきたよ。$error', 'ログイン失敗');
+                          context, '予期せぬエラーが出ました。$error', 'ログイン失敗');
                     }
                   },
                   child: const Text(
