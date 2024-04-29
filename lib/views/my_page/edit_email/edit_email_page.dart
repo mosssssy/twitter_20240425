@@ -67,6 +67,10 @@ class EditEmailPage extends StatelessWidget {
                   BlueButton(
                     buttonText: 'メールアドレス変更',
                     onBlueButtonPressed: () async {
+                      if (formkey.currentState!.validate() == false) {
+                        // 失敗時に処理ストップ
+                        return;
+                      }
                       try {
                         //まず一回ログインする
                         await FirebaseAuth.instance.signInWithEmailAndPassword(
