@@ -18,94 +18,98 @@ class EditEmailPage extends StatelessWidget {
     final TextEditingController newEmailController = TextEditingController();
     final TextEditingController passController = TextEditingController();
     emailController.text = myUserEmail;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'メールアドレス変更',
-          style: TextStyle(
-            color: Colors.white,
+    return GestureDetector(
+      onTap: () => primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'メールアドレス変更',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
+          backgroundColor: Colors.deepPurple,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
-        backgroundColor: Colors.deepPurple,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: formkey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                MarginSizedBox.mediumHeightMargin,
-                TextFormField(
-                  readOnly: true,
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    label: Text('今のメールアドレス'),
-                  ),
-                ),
-                MarginSizedBox.smallHeightMargin,
-                TextFormField(
-                  controller: newEmailController,
-                  decoration: const InputDecoration(
-                    label: Text('新しいメールアドレス'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value == '') {
-                      return '未入力です';
-                    }
-                    return null;
-                  },
-                ),
-                MarginSizedBox.smallHeightMargin,
-                TextFormField(
-                    controller: passController,
+        body: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: formkey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  MarginSizedBox.mediumHeightMargin,
+                  TextFormField(
+                    readOnly: true,
+                    controller: emailController,
                     decoration: const InputDecoration(
-                      label: Text('パスワード'),
+                      label: Text('今のメールアドレス'),
+                    ),
+                  ),
+                  MarginSizedBox.smallHeightMargin,
+                  TextFormField(
+                    controller: newEmailController,
+                    decoration: const InputDecoration(
+                      label: Text('新しいメールアドレス'),
                     ),
                     validator: (value) {
                       if (value == null || value == '') {
                         return '未入力です';
                       }
                       return null;
-                    }),
-                MarginSizedBox.bigHeightMargin,
-                BlueButton(
-                  buttonText: 'メールアドレス変更',
-                  onBlueButtonPressed: () async {
-                    try {
-                      //まず一回ログインする
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: emailController.text,
-                          password: passController.text);
-                      //メールアドレスを変更する
-                      await FirebaseAuth.instance.currentUser!
-                          .verifyBeforeUpdateEmail(newEmailController.text);
-                      bottomShowToast('メールアドレス変更用のメールを送信しました');
-                    } on FirebaseAuthException catch (error) {
-                      if (error.code == 'invalid-email') {
-                        showCloseOnlyDialog(
-                            context, 'メールアドレスの形式ではありません', '失敗しました');
-                      } else if (error.code == 'email-already-in-use') {
-                        showCloseOnlyDialog(
-                            context, '既に使われているメールアドレスです', '失敗しました');
-                      } else if (error.code == 'wrong-password') {
-                        showCloseOnlyDialog(context, 'パスワードが間違っています', '失敗しました');
-                      } else if (error.code == 'invalid-credential') {
-                        showCloseOnlyDialog(
-                            context, '無効なメールアドレスまたはパスワードです', '失敗しました');
-                      } else {
+                    },
+                  ),
+                  MarginSizedBox.smallHeightMargin,
+                  TextFormField(
+                      controller: passController,
+                      decoration: const InputDecoration(
+                        label: Text('パスワード'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value == '') {
+                          return '未入力です';
+                        }
+                        return null;
+                      }),
+                  MarginSizedBox.bigHeightMargin,
+                  BlueButton(
+                    buttonText: 'メールアドレス変更',
+                    onBlueButtonPressed: () async {
+                      try {
+                        //まず一回ログインする
+                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passController.text);
+                        //メールアドレスを変更する
+                        await FirebaseAuth.instance.currentUser!
+                            .verifyBeforeUpdateEmail(newEmailController.text);
+                        bottomShowToast('メールアドレス変更用のメールを送信しました');
+                      } on FirebaseAuthException catch (error) {
+                        if (error.code == 'invalid-email') {
+                          showCloseOnlyDialog(
+                              context, 'メールアドレスの形式ではありません', '失敗しました');
+                        } else if (error.code == 'email-already-in-use') {
+                          showCloseOnlyDialog(
+                              context, '既に使われているメールアドレスです', '失敗しました');
+                        } else if (error.code == 'wrong-password') {
+                          showCloseOnlyDialog(
+                              context, 'パスワードが間違っています', '失敗しました');
+                        } else if (error.code == 'invalid-credential') {
+                          showCloseOnlyDialog(
+                              context, '無効なメールアドレスまたはパスワードです', '失敗しました');
+                        } else {
+                          showCloseOnlyDialog(
+                              context, '予期せぬエラーが出ました。$error', '失敗しました');
+                        }
+                      } catch (error) {
                         showCloseOnlyDialog(
                             context, '予期せぬエラーが出ました。$error', '失敗しました');
                       }
-                    } catch (error) {
-                      showCloseOnlyDialog(
-                          context, '予期せぬエラーが出ました。$error', '失敗しました');
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
