@@ -374,16 +374,18 @@ class _MyPageState extends State<MyPage> {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        Navigator.pop(context); // Drawerを閉じる
+                        await Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) {
-                            return EditProfilePage(
-                              userName: userData.userName,
-                              profileIntroduction: userData.profileIntroduction,
-                            );
-                          }),
+                          MaterialPageRoute(
+                              builder: (context) => EditProfilePage(
+                                    userName: userData.userName,
+                                    profileIntroduction:
+                                        userData.profileIntroduction,
+                                  )),
                         );
+                        setState(() {});
                       },
                     ),
                     MarginSizedBox.mediumHeightMargin,
