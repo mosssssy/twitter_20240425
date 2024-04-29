@@ -2,7 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
+import 'package:twitter_20240425/common_widget/gon_twitter_text_form_field.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/views/my_page/components/blue_button.dart';
