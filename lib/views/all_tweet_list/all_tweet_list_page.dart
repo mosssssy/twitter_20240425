@@ -61,7 +61,7 @@ class TodoAllListPage extends StatelessWidget {
                     builder: (context, userSnapshot) {
                       if (userSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const SizedBox.shrink();
                       }
 
                       if (userSnapshot.hasError) {
