@@ -60,17 +60,16 @@ class EditEmailPage extends StatelessWidget {
                 ),
                 MarginSizedBox.smallHeightMargin,
                 TextFormField(
-                  controller: passController,
-                  decoration: const InputDecoration(
-                    label: Text('パスワード'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value == '') {
-                      return '未入力です';
-                    }
-                    return null;
-                  },
-                ),
+                    controller: passController,
+                    decoration: const InputDecoration(
+                      label: Text('パスワード'),
+                    ),
+                    validator: (value) {
+                      if (value == null || value == '') {
+                        return '未入力です';
+                      }
+                      return null;
+                    }),
                 MarginSizedBox.bigHeightMargin,
                 BlueButton(
                   buttonText: 'メールアドレス変更',
