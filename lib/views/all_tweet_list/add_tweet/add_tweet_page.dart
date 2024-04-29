@@ -105,10 +105,32 @@ class _AddTweetPageState extends State<AddTweetPage> {
                     label: 'ツイート'),
                 MarginSizedBox.smallHeightMargin,
                 (image != null)
-                    ? Image.file(
-                        image!,
-                        fit: BoxFit.cover,
-                      )
+                    ? Stack(children: [
+                        Image.file(
+                          image!,
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey, // 背景色を設定
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.black,
+                              ), // アイコンを設定
+                              onPressed: () async {
+                                // ボタンがタップされたときの処理
+                                // 画像削除
+                                image = null;
+                                bottomShowToast('画像削除しました');
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ),
+                      ])
                     : const SizedBox.shrink(),
                 MarginSizedBox.bigHeightMargin,
               ],
