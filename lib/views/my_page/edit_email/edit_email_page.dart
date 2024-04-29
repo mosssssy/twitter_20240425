@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
-import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:twitter_20240425/views/my_page/components/blue_button.dart';
 
 class EditEmailPage extends StatelessWidget {
