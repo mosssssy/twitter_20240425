@@ -243,7 +243,7 @@ class MyPage extends StatelessWidget {
                                                   tweetData.addedImageUrl,
                                                   width: 75,
                                                   height: 75,
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.scaleDown,
                                                 ),
                                                 MarginSizedBox.smallWidthMargin,
                                               ],
