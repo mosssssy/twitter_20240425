@@ -130,6 +130,10 @@ class TodoAllListPage extends StatelessWidget {
                                             text: '本当に削除しますか？',
                                             onPressed: () async {
                                               Navigator.pop(context);
+                                              await FirebaseFirestore.instance
+                                                  .collection('tweets')
+                                                  .doc(tweetData.tweetId)
+                                                  .delete();
                                               await FirebaseStorage.instance
                                                   .ref(
                                                       'addedImage/$tweetData.tweetId')
