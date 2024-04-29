@@ -74,16 +74,36 @@ class EditEmailPage extends StatelessWidget {
                       try {
                         //まず一回ログインする
                         await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: emailController.text,
-                            password: passController.text);
-                        //メールアドレスを変更する
+                          email: emailController.text,
+                          password: passController.text,
+                        );
+
+                        // メールアドレスを変更する
                         await FirebaseAuth.instance.currentUser!
                             .verifyBeforeUpdateEmail(newEmailController.text);
-                        showCloseOnlyDialog(context,
-                            'メールアドレス変更用のメールを送信しました。\nログアウトします。', 'メール送信完了');
-                        await FirebaseAuth.instance.signOut();
-                        Navigator.of(context).pop();
+
+                        // ダイアログを表示
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('メール送信完了'),
+                            content:
+                                const Text('メールアドレス変更用のメールを送信しました。\nログアウトします。'),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  // ダイアログを閉じてログアウトとポップアップを行う
+                                  Navigator.of(context).pop();
+                                  await FirebaseAuth.instance.signOut();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
                       } on FirebaseAuthException catch (error) {
+                        // print('$error');
                         if (error.code == 'invalid-email') {
                           showCloseOnlyDialog(
                               context, 'メールアドレスの形式ではありません', '失敗しました');
