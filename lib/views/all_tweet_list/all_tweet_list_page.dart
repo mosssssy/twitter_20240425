@@ -41,6 +41,7 @@ class TodoAllListPage extends StatelessWidget {
               querySnapshot.docs;
           // 現在：   [🐶{}🐶, 🐶{}🐶, 🐶{}🐶]
           return ListView.builder(
+            cacheExtent: 250.0 * 10.0,
             itemCount: listData.length,
             itemBuilder: (context, index) {
               final QueryDocumentSnapshot<Map<String, dynamic>>
@@ -50,18 +51,21 @@ class TodoAllListPage extends StatelessWidget {
               TweetData tweetData = TweetData.fromJson(mapData);
               return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
+                child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    future: FirebaseFirestore.instance
                         .collection('users')
                         .doc(tweetData.userId)
-                        .snapshots(),
-                    builder: (context,
-                        AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                            userSnapshot) {
-                      if (userSnapshot.hasData == false ||
-                          userSnapshot.data == null) {
-                        return Container();
+                        .get(),
+                    builder: (context, userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
                       }
+
+                      if (userSnapshot.hasError) {
+                        return Text('Error: ${userSnapshot.error}');
+                      }
+
                       final DocumentSnapshot<Map<String, dynamic>>
                           documentSnapshot = userSnapshot.data!;
                       final Map<String, dynamic> userMap =

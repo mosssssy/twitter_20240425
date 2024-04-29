@@ -51,5 +51,14 @@
 	<string>This app requires to add file to your camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires to add file to your photo library your microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>このアプリは写真ライブラリにアクセスする必要があります</string>
+	<key>NSCameraUsageDescription</key>
+	<string>このアプリはカメラにファイルを追加する必要があります</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>このアプリでは、マイクを使って写真ライブラリにファイルを追加する必要があります</string>
+	<!-- ここまで -->
+</dict>
+</plist>
 </dict>
 </plist>
