@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:twitter_20240425/common_widget/confirm_dialog.dart';
+import 'package:twitter_20240425/common_widget/custom_font_size.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/data_models/userdata/userdata.dart';
@@ -71,93 +73,118 @@ class TodoAllListPage extends StatelessWidget {
                       final Map<String, dynamic> userMap =
                           documentSnapshot.data()!;
                       final UserData postUser = UserData.fromJson(userMap);
-                      return Column(
-                        children: [
-                          ListTile(
-                            leading: (postUser.imageUrl != '')
-                                ? ClipOval(
-                                    child: Image.network(
-                                      postUser.imageUrl,
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                :
-                                //imageUrlが空文字だったら
-                                ClipOval(
-                                    child: Image.asset(
-                                      'assets/images/default_user_icon.png',
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                            title: Text(
-                              postUser.userName,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            subtitle: Row(
-                              children: [
-                                Text(
-                                  tweetData.createdAt
-                                      .toDate()
-                                      .toString()
-                                      .substring(0, 16),
-                                ),
-                              ],
-                            ),
-                            trailing: (tweetData.userId ==
-                                    FirebaseAuth.instance.currentUser!.uid)
-                                ? IconButton(
-                                    onPressed: () {
-                                      showConfirmDialog(
-                                          context: context,
-                                          text: '本当に削除しますか？',
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-                                            await FirebaseFirestore.instance
-                                                .collection('tweets')
-                                                .doc(tweetData.tweetId)
-                                                .delete();
-                                            bottomShowToast('削除成功しました');
-                                          });
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.deepPurple,
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                          ),
-                          Container(
-                            // ignore: sort_child_properties_last
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                      return Container(
+                        child: Column(
+                          children: [
+                            Container(
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  (tweetData.addedImageUrl.isNotEmpty)
-                                      ? Row(
-                                          children: [
-                                            Image.network(
-                                              tweetData.addedImageUrl,
-                                              width: 75,
-                                              height: 75,
-                                              fit: BoxFit.cover,
+                                  Row(
+                                    children: [
+                                      (postUser.imageUrl != '')
+                                          ? ClipOval(
+                                              child: Image.network(
+                                                postUser.imageUrl,
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          :
+                                          //imageUrlが空文字だったら
+                                          ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/default_user_icon.png',
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
-                                            MarginSizedBox.smallWidthMargin,
-                                          ],
+                                      MarginSizedBox.miniWidthMargin,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            postUser.userName,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            DateFormat('yyyy年MM月dd日 HH:mm')
+                                                .format(tweetData.createdAt
+                                                    .toDate()),
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  (tweetData.userId ==
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                      ? IconButton(
+                                          onPressed: () {
+                                            showConfirmDialog(
+                                                context: context,
+                                                text: '本当に削除しますか？',
+                                                onPressed: () async {
+                                                  Navigator.pop(context);
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection('tweets')
+                                                      .doc(tweetData.tweetId)
+                                                      .delete();
+                                                  bottomShowToast('削除成功しました');
+                                                });
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.deepPurple,
+                                          ),
                                         )
                                       : const SizedBox.shrink(),
-                                  Expanded(child: Text(tweetData.tweetContent)),
                                 ],
                               ),
                             ),
-                            width: double.infinity,
-                            color: Colors.white,
-                          ),
-                        ],
+                            MarginSizedBox.miniHeightMargin,
+                            Container(
+                              // ignore: sort_child_properties_last
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  children: [
+                                    (tweetData.addedImageUrl.isNotEmpty)
+                                        ? Row(
+                                            children: [
+                                              Image.network(
+                                                tweetData.addedImageUrl,
+                                                width: 75,
+                                                height: 75,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              MarginSizedBox.smallWidthMargin,
+                                            ],
+                                          )
+                                        : const SizedBox.shrink(),
+                                    Expanded(
+                                        child: Text(tweetData.tweetContent)),
+                                  ],
+                                ),
+                              ),
+                              width: double.infinity,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
                       );
                     }),
               );
