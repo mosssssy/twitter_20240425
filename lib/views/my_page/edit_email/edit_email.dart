@@ -33,78 +33,81 @@ class EditEmailPage extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         child: Form(
           key: formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                readOnly: true,
-                controller: emailController,
-                decoration: const InputDecoration(
-                  label: Text('今のメールアドレス'),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                MarginSizedBox.mediumHeightMargin,
+                TextFormField(
+                  readOnly: true,
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    label: Text('今のメールアドレス'),
+                  ),
                 ),
-              ),
-              MarginSizedBox.smallHeightMargin,
-              TextFormField(
-                controller: newEmailController,
-                decoration: const InputDecoration(
-                  label: Text('新しいメールアドレス'),
+                MarginSizedBox.smallHeightMargin,
+                TextFormField(
+                  controller: newEmailController,
+                  decoration: const InputDecoration(
+                    label: Text('新しいメールアドレス'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return '未入力です';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value == '') {
-                    return '未入力です';
-                  }
-                  return null;
-                },
-              ),
-              MarginSizedBox.smallHeightMargin,
-              TextFormField(
-                controller: passController,
-                decoration: const InputDecoration(
-                  label: Text('パスワード'),
+                MarginSizedBox.smallHeightMargin,
+                TextFormField(
+                  controller: passController,
+                  decoration: const InputDecoration(
+                    label: Text('パスワード'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return '未入力です';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value == '') {
-                    return '未入力です';
-                  }
-                  return null;
-                },
-              ),
-              MarginSizedBox.bigHeightMargin,
-              BlueButton(
-                buttonText: 'メールアドレス変更',
-                onBlueButtonPressed: () async {
-                  try {
-                    //まず一回ログインする
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passController.text);
-                    //メールアドレスを変更する
-                    await FirebaseAuth.instance.currentUser!
-                        .verifyBeforeUpdateEmail(newEmailController.text);
-                    bottomShowToast('メールアドレス変更用のメールを送信しました');
-                  } on FirebaseAuthException catch (error) {
-                    if (error.code == 'invalid-email') {
-                      showCloseOnlyDialog(
-                          context, 'メールアドレスの形式ではありません', '失敗しました');
-                    } else if (error.code == 'email-already-in-use') {
-                      showCloseOnlyDialog(
-                          context, '既に使われているメールアドレスです', '失敗しました');
-                    } else if (error.code == 'wrong-password') {
-                      showCloseOnlyDialog(context, 'パスワードが間違っています', '失敗しました');
-                    } else if (error.code == 'invalid-credential') {
-                      showCloseOnlyDialog(
-                          context, '無効なメールアドレスまたはパスワードです', '失敗しました');
-                    } else {
+                MarginSizedBox.bigHeightMargin,
+                BlueButton(
+                  buttonText: 'メールアドレス変更',
+                  onBlueButtonPressed: () async {
+                    try {
+                      //まず一回ログインする
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passController.text);
+                      //メールアドレスを変更する
+                      await FirebaseAuth.instance.currentUser!
+                          .verifyBeforeUpdateEmail(newEmailController.text);
+                      bottomShowToast('メールアドレス変更用のメールを送信しました');
+                    } on FirebaseAuthException catch (error) {
+                      if (error.code == 'invalid-email') {
+                        showCloseOnlyDialog(
+                            context, 'メールアドレスの形式ではありません', '失敗しました');
+                      } else if (error.code == 'email-already-in-use') {
+                        showCloseOnlyDialog(
+                            context, '既に使われているメールアドレスです', '失敗しました');
+                      } else if (error.code == 'wrong-password') {
+                        showCloseOnlyDialog(context, 'パスワードが間違っています', '失敗しました');
+                      } else if (error.code == 'invalid-credential') {
+                        showCloseOnlyDialog(
+                            context, '無効なメールアドレスまたはパスワードです', '失敗しました');
+                      } else {
+                        showCloseOnlyDialog(
+                            context, '予期せぬエラーが出ました。$error', '失敗しました');
+                      }
+                    } catch (error) {
                       showCloseOnlyDialog(
                           context, '予期せぬエラーが出ました。$error', '失敗しました');
                     }
-                  } catch (error) {
-                    showCloseOnlyDialog(
-                        context, '予期せぬエラーが出ました。$error', '失敗しました');
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
