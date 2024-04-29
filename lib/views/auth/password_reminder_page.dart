@@ -57,7 +57,7 @@ class PasswordReminderPage extends StatelessWidget {
                         // メール/パスワードでログイン
                         await FirebaseAuth.instance.sendPasswordResetEmail(
                             email: emailController.text);
-                        topShowToast('パスワード変更用のメールを送信しました');
+                        topShowToast('パスワードリセット用のメールを送信しました');
                       } on FirebaseAuthException catch (error) {
                         if (error.code == 'invalid-email') {
                           showCloseOnlyDialog(
