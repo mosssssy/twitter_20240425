@@ -338,6 +338,7 @@ class MyPage extends StatelessWidget {
                         await FirebaseAuth.instance.signOut();
                       },
                     ),
+                    MarginSizedBox.bigHeightMargin,
                   ],
                 ),
               ),

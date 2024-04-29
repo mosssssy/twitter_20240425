@@ -18,164 +18,181 @@ class AuthPage extends StatelessWidget {
     final TextEditingController passController = TextEditingController();
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'GonTwitter',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Form(
         key: formkey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AuthTextFormField(
-                controller: emailController,
-                label: 'メールアドレス',
-              ),
-              MarginSizedBox.smallHeightMargin,
-              AuthTextFormField(
-                controller: passController,
-                label: 'パスワード',
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: InkWell(
-                  onTap: () {
-                    // 1) 指定した画面に遷移する
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const PasswordReminderPage();
-                      // 2) 実際に表示するページを指定する
-                    }));
-                  },
-                  child: const Text(
-                    'パスワードを忘れた方はこちら >',
-                    style: TextStyle(color: Colors.deepPurple),
-                    textAlign: TextAlign.end,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MarginSizedBox.bigHeightMargin,
+                AuthTextFormField(
+                  controller: emailController,
+                  label: 'メールアドレス',
+                ),
+                MarginSizedBox.smallHeightMargin,
+                AuthTextFormField(
+                  controller: passController,
+                  label: 'パスワード',
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: InkWell(
+                    onTap: () {
+                      // 1) 指定した画面に遷移する
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const PasswordReminderPage();
+                        // 2) 実際に表示するページを指定する
+                      }));
+                    },
+                    child: const Text(
+                      'パスワードを忘れた方はこちら >',
+                      style: TextStyle(color: Colors.deepPurple),
+                      textAlign: TextAlign.end,
+                    ),
                   ),
                 ),
-              ),
-              MarginSizedBox.bigHeightMargin,
-              ElevatedButton(
-                  onPressed: () async {
-                    if (formkey.currentState!.validate() == false) {
-                      // 失敗時に処理ストップ
-                      return;
-                    }
-                    // 成功
-                    try {
-                      final User? user = (await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passController.text))
-                          .user;
-                      if (user != null) {
-                        print('ユーザーを登録しました');
-                        // FirebaseStore に userドキュメントを作成
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.uid)
-                            .set({
-                          'userName': '',
-                          'imageUrl': '',
-                          'userId': '',
-                          'profileIntroduction': '',
-                          'createdAt': Timestamp.now(),
-                          'updatedAt': Timestamp.now(),
-                        });
-                        AlertDialog(
-                          title: const Text("会員登録成功"),
-                          content: const Text('ユーザーを登録しました'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text("close"),
-                            )
-                          ],
-                        );
-                      } else {
+                MarginSizedBox.bigHeightMargin,
+                ElevatedButton(
+                    onPressed: () async {
+                      if (formkey.currentState!.validate() == false) {
+                        // 失敗時に処理ストップ
+                        return;
+                      }
+                      // 成功
+                      try {
+                        final User? user = (await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passController.text))
+                            .user;
+                        if (user != null) {
+                          print('ユーザーを登録しました');
+                          // FirebaseStore に userドキュメントを作成
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .set({
+                            'userName': '',
+                            'imageUrl': '',
+                            'userId': '',
+                            'profileIntroduction': '',
+                            'createdAt': Timestamp.now(),
+                            'updatedAt': Timestamp.now(),
+                          });
+                          AlertDialog(
+                            title: const Text("会員登録成功"),
+                            content: const Text('ユーザーを登録しました'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("close"),
+                              )
+                            ],
+                          );
+                        } else {
+                          showCloseOnlyDialog(
+                              context, '予期せぬエラーが出ました。\nやり直してください。', '会員登録失敗');
+                        }
+                      } on FirebaseAuthException catch (error) {
+                        if (error.code == 'invalid-email') {
+                          print('メールアドレスの形式ではありません');
+                          showCloseOnlyDialog(
+                              context, 'メールアドレスの形式ではありません', '会員登録失敗');
+                        }
+                        if (error.code == 'email-already-in-use') {
+                          print('すでに使われているメールアドレスです');
+                          showCloseOnlyDialog(
+                              context, '既に使われているメールアドレスです', '会員登録失敗');
+                        }
+                        if (error.code == 'weak-password') {
+                          print('パスワードが弱すぎます');
+                          showCloseOnlyDialog(context, 'パスワードが弱すぎます', '会員登録失敗');
+                        }
+                      } catch (error) {
+                        print('予期せぬエラーです');
                         showCloseOnlyDialog(
                             context, '予期せぬエラーが出ました。\nやり直してください。', '会員登録失敗');
                       }
-                    } on FirebaseAuthException catch (error) {
-                      if (error.code == 'invalid-email') {
-                        print('メールアドレスの形式ではありません');
-                        showCloseOnlyDialog(
-                            context, 'メールアドレスの形式ではありません', '会員登録失敗');
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple),
+                    child: const Text(
+                      '会員登録',
+                      style: TextStyle(color: Colors.white),
+                    )),
+                MarginSizedBox.smallHeightMargin,
+                ElevatedButton(
+                    onPressed: () async {
+                      if (formkey.currentState!.validate() == false) {
+                        return;
                       }
-                      if (error.code == 'email-already-in-use') {
-                        print('すでに使われているメールアドレスです');
+                      try {
+                        // メール/パスワードでログイン
+                        final FirebaseAuth auth = FirebaseAuth.instance;
+                        final User? user =
+                            (await auth.signInWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passController.text,
+                        ))
+                                .user;
+                        if (user != null) {
+                          print('ログイン成功');
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .update({
+                            'updatedAt': Timestamp.now(),
+                          });
+                        } else {
+                          print('ログイン失敗');
+                          showCloseOnlyDialog(
+                              context, '予期せぬエラーが出ました。\n再度やり直してください。', 'ログイン失敗');
+                        }
+                      } on FirebaseAuthException catch (error) {
+                        print(error.code);
+                        if (error.code == 'user-not-found') {
+                          showCloseOnlyDialog(
+                              context, 'ユーザーが見つかりません', 'ログイン失敗');
+                        } else if (error.code == 'invalid-email') {
+                          showCloseOnlyDialog(
+                              context, 'メールアドレスの形式ではありません', 'ログイン失敗');
+                        } else if (error.code == 'user-disabled') {
+                          showCloseOnlyDialog(
+                              context, 'このアカウントは無効化されています', 'ログイン失敗');
+                        } else if (error.code == 'wrong-password') {
+                          showCloseOnlyDialog(
+                              context, 'パスワードが間違っています', 'ログイン失敗');
+                        } else if (error.code == 'invalid-credential') {
+                          showCloseOnlyDialog(
+                              context, '無効なメールアドレスまたはパスワードです', 'ログイン失敗');
+                        }
+                      } catch (error) {
                         showCloseOnlyDialog(
-                            context, '既に使われているメールアドレスです', '会員登録失敗');
+                            context, '予期せぬエラーが出ました。$error', 'ログイン失敗');
                       }
-                      if (error.code == 'weak-password') {
-                        print('パスワードが弱すぎます');
-                        showCloseOnlyDialog(context, 'パスワードが弱すぎます', '会員登録失敗');
-                      }
-                    } catch (error) {
-                      print('予期せぬエラーです');
-                      showCloseOnlyDialog(
-                          context, '予期せぬエラーが出ました。\nやり直してください。', '会員登録失敗');
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple),
-                  child: const Text(
-                    '会員登録',
-                    style: TextStyle(color: Colors.white),
-                  )),
-              MarginSizedBox.smallHeightMargin,
-              ElevatedButton(
-                  onPressed: () async {
-                    if (formkey.currentState!.validate() == false) {
-                      return;
-                    }
-                    try {
-                      // メール/パスワードでログイン
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      final User? user = (await auth.signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passController.text,
-                      ))
-                          .user;
-                      if (user != null) {
-                        print('ログイン成功');
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.uid)
-                            .update({
-                          'updatedAt': Timestamp.now(),
-                        });
-                      } else {
-                        print('ログイン失敗');
-                        showCloseOnlyDialog(
-                            context, '予期せぬエラーが出ました。\n再度やり直してください。', 'ログイン失敗');
-                      }
-                    } on FirebaseAuthException catch (error) {
-                      print(error.code);
-                      if (error.code == 'user-not-found') {
-                        showCloseOnlyDialog(context, 'ユーザーが見つかりません', 'ログイン失敗');
-                      } else if (error.code == 'invalid-email') {
-                        showCloseOnlyDialog(
-                            context, 'メールアドレスの形式ではありません', 'ログイン失敗');
-                      } else if (error.code == 'user-disabled') {
-                        showCloseOnlyDialog(
-                            context, 'このアカウントは無効化されています', 'ログイン失敗');
-                      } else if (error.code == 'wrong-password') {
-                        showCloseOnlyDialog(context, 'パスワードが間違っています', 'ログイン失敗');
-                      } else if (error.code == 'invalid-credential') {
-                        showCloseOnlyDialog(
-                            context, '無効なメールアドレスまたはパスワードです', 'ログイン失敗');
-                      }
-                    } catch (error) {
-                      showCloseOnlyDialog(
-                          context, '予期せぬエラーが出ました。$error', 'ログイン失敗');
-                    }
-                  },
-                  child: const Text(
-                    'ログイン',
-                    style: TextStyle(color: Colors.deepPurple),
-                  )),
-            ],
+                    },
+                    child: const Text(
+                      'ログイン',
+                      style: TextStyle(color: Colors.deepPurple),
+                    )),
+              ],
+            ),
           ),
         ),
       ),
