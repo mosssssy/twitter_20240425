@@ -105,6 +105,7 @@ class MyPage extends StatelessWidget {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  MarginSizedBox.smallHeightMargin,
                                   if (userData.imageUrl != '')
                                     ClipOval(
                                       child: Image.network(
@@ -135,7 +136,7 @@ class MyPage extends StatelessWidget {
                                     userData.profileIntroduction,
                                     style: CustomFontSize.mediumFontSize,
                                   ),
-                                  MarginSizedBox.bigHeightMargin,
+                                  MarginSizedBox.mediumHeightMargin,
                                 ],
                               );
                             })
@@ -159,82 +160,79 @@ class MyPage extends StatelessWidget {
                           final Map<String, dynamic> userMap =
                               documentSnapshot.data()!;
                           final UserData postUser = UserData.fromJson(userMap);
-                          return Container(
-                              child: Column(
+                          return Column(
                             children: [
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        (postUser.imageUrl != '')
-                                            ? ClipOval(
-                                                child: Image.network(
-                                                  postUser.imageUrl,
-                                                  width: 50,
-                                                  height: 50,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )
-                                            :
-                                            //imageUrlが空文字だったら
-                                            ClipOval(
-                                                child: Image.asset(
-                                                  'assets/images/default_user_icon.png',
-                                                  width: 50,
-                                                  height: 50,
-                                                  fit: BoxFit.cover,
-                                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      (postUser.imageUrl != '')
+                                          ? ClipOval(
+                                              child: Image.network(
+                                                postUser.imageUrl,
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
                                               ),
-                                        MarginSizedBox.miniWidthMargin,
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              postUser.userName,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
+                                            )
+                                          :
+                                          //imageUrlが空文字だったら
+                                          ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/default_user_icon.png',
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                            Text(
-                                              DateFormat('yyyy年MM月dd日 HH:mm')
-                                                  .format(tweetData.createdAt
-                                                      .toDate()),
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                              ),
+                                      MarginSizedBox.miniWidthMargin,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            postUser.userName,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        showConfirmDialog(
-                                            context: context,
-                                            text: '本当に削除しますか？',
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              await FirebaseFirestore.instance
-                                                  .collection('tweets')
-                                                  .doc(tweetData.tweetId)
-                                                  .delete();
-                                              bottomShowToast('削除成功しました');
-                                            });
-                                      },
-                                      icon: const Icon(
-                                        Icons.close,
-                                        color: Colors.deepPurple,
+                                          ),
+                                          Text(
+                                            DateFormat('yyyy年MM月dd日 HH:mm')
+                                                .format(tweetData.createdAt
+                                                    .toDate()),
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      showConfirmDialog(
+                                          context: context,
+                                          text: '本当に削除しますか？',
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                            await FirebaseFirestore.instance
+                                                .collection('tweets')
+                                                .doc(tweetData.tweetId)
+                                                .delete();
+                                            bottomShowToast('削除成功しました');
+                                          });
+                                    },
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.deepPurple,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                               MarginSizedBox.miniHeightMargin,
                               Container(
@@ -265,7 +263,7 @@ class MyPage extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ],
-                          ));
+                          );
                         }),
                   ],
                 ),
