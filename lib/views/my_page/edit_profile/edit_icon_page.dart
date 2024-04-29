@@ -137,23 +137,29 @@ class _EditIconPageState extends State<EditIconPage> {
                   buttonText: 'プロフィールを変更する',
                   onBlueButtonPressed: () async {
                     try {
-                      ///ストレージに選択した画像をアップロードする
-                      final storedImage = await FirebaseStorage.instance
-                          .ref('userIcon/${user.uid}')
-                          .putFile(image!);
-                      //ストレージにあげた画像のURLを取得する
-                      final String imageUrl =
-                          await storedImage.ref.getDownloadURL();
-                      //上記で取得したURLを使ってUserドキュメントを更新する
-                      await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user.uid)
-                          .update(
-                        {
-                          'imageUrl': imageUrl,
-                          'updatedAt': DateTime.now(),
-                        },
-                      );
+                      if (image != null) {
+                        // imageがnullでないことを確認
+                        // 画像をアップロードする
+                        final storedImage = await FirebaseStorage.instance
+                            .ref('userIcon/${user.uid}')
+                            .putFile(image!);
+                        // アップロードした画像のURLを取得
+                        final String imageUrl =
+                            await storedImage.ref.getDownloadURL();
+                        // ユーザードキュメントを更新
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update(
+                          {
+                            'imageUrl': imageUrl,
+                            'updatedAt': DateTime.now(),
+                          },
+                        );
+                      } else {
+                        bottomShowToast('画像が選択されていません');
+                        return;
+                      }
                       topShowToast('変更成功しました！');
                       Navigator.of(context).pop();
                     } catch (error) {
