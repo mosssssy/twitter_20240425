@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
+import 'package:twitter_20240425/functions/global_functions.dart';
 
 class PasswordReminderPage extends StatelessWidget {
   const PasswordReminderPage({super.key});
@@ -56,6 +57,7 @@ class PasswordReminderPage extends StatelessWidget {
                         // メール/パスワードでログイン
                         await FirebaseAuth.instance.sendPasswordResetEmail(
                             email: emailController.text);
+                        topShowToast('パスワード変更用のメールを送信しました');
                       } on FirebaseAuthException catch (error) {
                         if (error.code == 'invalid-email') {
                           showCloseOnlyDialog(
