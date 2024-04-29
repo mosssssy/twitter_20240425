@@ -149,7 +149,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       MarginSizedBox.mediumHeightMargin,
                       GonTwitterLimitedTextFormField(
                           trimMsg: 'プロフィール文章を入力してください',
-                          controller: userNameController,
+                          controller: profileIntroductionController,
                           maxLength: 50,
                           maxLines: 3,
                           label: 'プロフィール文章'),
