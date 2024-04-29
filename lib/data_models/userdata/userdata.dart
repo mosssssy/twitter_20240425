@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:twitter_20240425/data_models/components/timestamp_converter.dart';
 
 part 'userdata.freezed.dart';
 part 'userdata.g.dart';
@@ -18,16 +19,4 @@ class UserData with _$UserData {
 
   factory UserData.fromJson(Map<String, dynamic> json) =>
       _$UserDataFromJson(json);
-}
-
-class TimestampConverter implements JsonConverter<Timestamp, Timestamp> {
-  const TimestampConverter();
-
-  @override
-  Timestamp fromJson(Timestamp timestamp) {
-    return timestamp;
-  }
-
-  @override
-  Timestamp toJson(Timestamp date) => date;
 }
