@@ -86,134 +86,135 @@ class _EditProfilePageState extends State<EditProfilePage> {
             padding: const EdgeInsets.all(24.0),
             child: Form(
                 key: formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        children: [
-                          previewWidget,
-                          if (widget.imageUrl != '')
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.grey, // 背景色を設定
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: Colors.black,
-                                  ), // アイコンを設定
-                                  onPressed: () async {
-                                    // ボタンがタップされたときの処理
-                                    // 画像削除
-                                    // 上記で取得したURLを使ってUserドキュメントを更新する
-                                    await FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(user.uid)
-                                        .update(
-                                      {
-                                        'imageUrl': '',
-                                        'updatedAt': Timestamp.now(),
-                                      },
-                                    );
-                                    await FirebaseStorage.instance
-                                        .ref('userIcon/${user.uid}')
-                                        .delete();
-                                    widget.imageUrl = '';
-                                    bottomShowToast('画像削除しました');
-                                    setState(() {});
-                                  },
-                                ),
+                child: ListView(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        previewWidget,
+                        if (widget.imageUrl != '')
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey, // 背景色を設定
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.black,
+                                ), // アイコンを設定
+                                onPressed: () async {
+                                  // ボタンがタップされたときの処理
+                                  // 画像削除
+                                  // 上記で取得したURLを使ってUserドキュメントを更新する
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user.uid)
+                                      .update(
+                                    {
+                                      'imageUrl': '',
+                                      'updatedAt': Timestamp.now(),
+                                    },
+                                  );
+                                  await FirebaseStorage.instance
+                                      .ref('userIcon/${user.uid}')
+                                      .delete();
+                                  widget.imageUrl = '';
+                                  bottomShowToast('画像削除しました');
+                                  setState(() {});
+                                },
                               ),
                             ),
-                        ],
-                      ),
-                      MarginSizedBox.mediumHeightMargin,
-                      BlueButton(
-                        buttonText: '画像を選択する',
-                        onBlueButtonPressed: () {
-                          //Image Pickerをインスタンス化
-                          getImageFromGallery();
-                        },
-                      ),
-                      MarginSizedBox.mediumHeightMargin,
-                      TextFormField(
-                          controller: userNameController,
-                          validator: (value) {
-                            if (value == null || value == '') {
-                              return '未入力です';
-                            }
-                            return null;
-                          },
-                          decoration:
-                              const InputDecoration(label: Text('ユーザーネーム'))),
-                      MarginSizedBox.mediumHeightMargin,
-                      TextFormField(
-                          controller: profileIntroductionController,
-                          validator: (value) {
-                            if (value == null || value == '') {
-                              return '未入力です';
-                            }
-                            return null;
-                          },
-                          decoration:
-                              const InputDecoration(label: Text('プロフィール文章'))),
-                      MarginSizedBox.mediumHeightMargin,
-                      BlueButton(
-                        buttonText: 'プロフィールを変更する',
-                        onBlueButtonPressed: () async {
-                          if (formKey.currentState!.validate() == false) {
-                            return;
+                          ),
+                      ],
+                    ),
+                    MarginSizedBox.mediumHeightMargin,
+                    BlueButton(
+                      buttonText: '画像を選択する',
+                      onBlueButtonPressed: () {
+                        //Image Pickerをインスタンス化
+                        getImageFromGallery();
+                      },
+                    ),
+                    MarginSizedBox.mediumHeightMargin,
+                    TextFormField(
+                        controller: userNameController,
+                        maxLength: 12,
+                        validator: (value) {
+                          if (value == null || value == '') {
+                            return '未入力です';
                           }
-                          try {
-                            if (image != null) {
-                              ///imageがnullじゃない
-                              ///画像を選択したとき
-                              ///ストレージに選択した画像をアップロードする
-                              final storedImage = await FirebaseStorage.instance
-                                  .ref('userIcon/${user.uid}')
-                                  .putFile(image!);
-                              //ストレージにあげた画像のURLを取得する
-                              final String imageUrl =
-                                  await storedImage.ref.getDownloadURL();
-                              //上記で取得したURLを使ってUserドキュメントを更新する
-                              await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(user.uid)
-                                  .update(
-                                {
-                                  'imageUrl': imageUrl,
-                                  'userName': userNameController.text,
-                                  'profileIntroduction':
-                                      profileIntroductionController.text,
-                                  'updatedAt': Timestamp.now(),
-                                },
-                              );
-                            } else {
-                              ///imageがnull
-                              ///画像を選択していないとき
-                              await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(user.uid)
-                                  .update(
-                                {
-                                  'userName': userNameController.text,
-                                  'profileIntroduction':
-                                      profileIntroductionController.text,
-                                  'updatedAt': Timestamp.now(),
-                                },
-                              );
-                            }
-                            bottomShowToast('変更成功しました！');
-                          } catch (error) {
-                            showCloseOnlyDialog(
-                                context, error.toString(), '更新失敗しました');
-                          }
+                          return null;
                         },
-                      ),
-                    ],
-                  ),
+                        decoration:
+                            const InputDecoration(label: Text('ユーザーネーム'))),
+                    MarginSizedBox.mediumHeightMargin,
+                    TextFormField(
+                        controller: profileIntroductionController,
+                        maxLines: 3,
+                        maxLength: 50,
+                        validator: (value) {
+                          if (value == null || value == '') {
+                            return '未入力です';
+                          }
+                          return null;
+                        },
+                        decoration:
+                            const InputDecoration(label: Text('プロフィール文章'))),
+                    MarginSizedBox.mediumHeightMargin,
+                    BlueButton(
+                      buttonText: 'プロフィールを変更する',
+                      onBlueButtonPressed: () async {
+                        if (formKey.currentState!.validate() == false) {
+                          return;
+                        }
+                        try {
+                          if (image != null) {
+                            ///imageがnullじゃない
+                            ///画像を選択したとき
+                            ///ストレージに選択した画像をアップロードする
+                            final storedImage = await FirebaseStorage.instance
+                                .ref('userIcon/${user.uid}')
+                                .putFile(image!);
+                            //ストレージにあげた画像のURLを取得する
+                            final String imageUrl =
+                                await storedImage.ref.getDownloadURL();
+                            //上記で取得したURLを使ってUserドキュメントを更新する
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user.uid)
+                                .update(
+                              {
+                                'imageUrl': imageUrl,
+                                'userName': userNameController.text,
+                                'profileIntroduction':
+                                    profileIntroductionController.text,
+                                'updatedAt': Timestamp.now(),
+                              },
+                            );
+                          } else {
+                            ///imageがnull
+                            ///画像を選択していないとき
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user.uid)
+                                .update(
+                              {
+                                'userName': userNameController.text,
+                                'profileIntroduction':
+                                    profileIntroductionController.text,
+                                'updatedAt': Timestamp.now(),
+                              },
+                            );
+                          }
+                          topShowToast('変更成功しました！');
+                        } catch (error) {
+                          showCloseOnlyDialog(
+                              context, error.toString(), '更新失敗しました');
+                        }
+                      },
+                    ),
+                  ],
                 ))));
   }
 

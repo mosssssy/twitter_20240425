@@ -8,7 +8,6 @@ import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:twitter_20240425/views/my_page/components/small_blue_button.dart';
 import 'package:uuid/uuid.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
-import 'package:twitter_20240425/views/my_page/components/blue_button.dart';
 
 class AddTweetPage extends StatefulWidget {
   const AddTweetPage({super.key});
