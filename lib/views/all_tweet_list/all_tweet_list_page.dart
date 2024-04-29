@@ -117,7 +117,7 @@ class TodoAllListPage extends StatelessWidget {
                                                 .collection('tweets')
                                                 .doc(tweetData.tweetId)
                                                 .delete();
-                                            showToast('削除成功しました');
+                                            bottomShowToast('削除成功しました');
                                           });
                                     },
                                     icon: const Icon(

@@ -121,7 +121,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         .ref('userIcon/${user.uid}')
                                         .delete();
                                     widget.imageUrl = '';
-                                    showToast('画像削除しました');
+                                    bottomShowToast('画像削除しました');
                                     setState(() {});
                                   },
                                 ),
@@ -205,7 +205,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 },
                               );
                             }
-                            showToast('変更成功しました！');
+                            bottomShowToast('変更成功しました！');
                           } catch (error) {
                             showCloseOnlyDialog(
                                 context, error.toString(), '更新失敗しました');

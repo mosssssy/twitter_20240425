@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
+import 'package:twitter_20240425/views/my_page/components/small_blue_button.dart';
 import 'package:uuid/uuid.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/views/my_page/components/blue_button.dart';
@@ -36,12 +37,64 @@ class _AddTweetPageState extends State<AddTweetPage> {
         padding: const EdgeInsets.all(24.0),
         child: Form(
           key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SmallBlueButton(
+                    buttonText: '画像を選択',
+                    onBlueButtonPressed: () {
+                      //Image Pickerをインスタンス化
+                      getImageFromGallery();
+                    },
+                  ),
+                  MarginSizedBox.smallWidthMargin,
+                  SmallBlueButton(
+                    buttonText: 'ツイート',
+                    onBlueButtonPressed: () async {
+                      if (formKey.currentState!.validate() == false) {
+                        return;
+                      }
+                      final String uuid = const Uuid().v4();
+                      FirebaseFirestore.instance
+                          .collection('tweets')
+                          .doc(uuid)
+                          .set({
+                        'tweetContent': tweetContentController.text,
+                        'userId': FirebaseAuth.instance.currentUser!.uid,
+                        'createdAt': Timestamp.now(),
+                        'updatedAt': Timestamp.now(),
+                        'addedImageUrl': "",
+                        'tweetId': uuid,
+                      });
+                      if (image != null) {
+                        ///ストレージに選択した画像をアップロードする
+                        final storedImage = await FirebaseStorage.instance
+                            .ref('addedImage/$uuid')
+                            .putFile(image!);
+                        //ストレージにあげた画像のURLを取得する
+                        final String addedImageUrl =
+                            await storedImage.ref.getDownloadURL();
+                        await FirebaseFirestore.instance
+                            .collection('tweets')
+                            .doc(uuid)
+                            .update({
+                          'addedImageUrl': addedImageUrl,
+                        });
+                      }
+                      tweetContentController.clear();
+                      image = null;
+                      setState(() {});
+                      topShowToast('ツイートが追加されました');
+                    },
+                  ),
+                ],
+              ),
               TextFormField(
                 controller: tweetContentController,
                 maxLength: 140,
+                maxLines: 7,
                 validator: (value) {
                   if (value == null || value == '') {
                     return '未入力です';
@@ -53,14 +106,6 @@ class _AddTweetPageState extends State<AddTweetPage> {
                 ),
               ),
               MarginSizedBox.smallHeightMargin,
-              BlueButton(
-                buttonText: '画像を選択する',
-                onBlueButtonPressed: () {
-                  //Image Pickerをインスタンス化
-                  getImageFromGallery();
-                },
-              ),
-              MarginSizedBox.smallHeightMargin,
               (image != null)
                   ? Image.file(
                       image!,
@@ -68,44 +113,6 @@ class _AddTweetPageState extends State<AddTweetPage> {
                     )
                   : const SizedBox.shrink(),
               MarginSizedBox.bigHeightMargin,
-              BlueButton(
-                buttonText: 'ツイートを追加する',
-                onBlueButtonPressed: () async {
-                  if (formKey.currentState!.validate() == false) {
-                    return;
-                  }
-                  final String uuid = const Uuid().v4();
-                  FirebaseFirestore.instance
-                      .collection('tweets')
-                      .doc(uuid)
-                      .set({
-                    'tweetContent': tweetContentController.text,
-                    'userId': FirebaseAuth.instance.currentUser!.uid,
-                    'createdAt': Timestamp.now(),
-                    'updatedAt': Timestamp.now(),
-                    'addedImageUrl': "",
-                    'tweetId': uuid,
-                  });
-                  if (image != null) {
-                    ///ストレージに選択した画像をアップロードする
-                    final storedImage = await FirebaseStorage.instance
-                        .ref('addedImage/$uuid')
-                        .putFile(image!);
-                    //ストレージにあげた画像のURLを取得する
-                    final String addedImageUrl =
-                        await storedImage.ref.getDownloadURL();
-                    await FirebaseFirestore.instance
-                        .collection('tweets')
-                        .doc(uuid)
-                        .update({
-                      'addedImageUrl': addedImageUrl,
-                    });
-                  }
-
-                  showToast('ツイートが追加されました');
-                  tweetContentController.clear();
-                },
-              ),
             ],
           ),
         ),

@@ -206,7 +206,7 @@ class MyPage extends StatelessWidget {
                                                     .collection('tweets')
                                                     .doc(tweetData.tweetId)
                                                     .delete();
-                                                showToast('削除成功しました');
+                                                bottomShowToast('削除成功しました');
                                               });
                                         },
                                         icon: const Icon(
@@ -292,7 +292,7 @@ class MyPage extends StatelessWidget {
                             try {
                               await FirebaseAuth.instance
                                   .sendPasswordResetEmail(email: myUserEmail!);
-                              showToast("パスワードリセット用のメールを送信しました");
+                              bottomShowToast("パスワードリセット用のメールを送信しました");
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                             } catch (e) {
