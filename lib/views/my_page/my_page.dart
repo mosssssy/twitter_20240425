@@ -10,15 +10,23 @@ import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:twitter_20240425/views/my_page/edit_email/edit_email_page.dart';
+import 'package:twitter_20240425/views/my_page/edit_profile/edit_icon_page.dart';
 import 'package:twitter_20240425/views/my_page/edit_profile/edit_profile_page.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
+  @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     final String? myUserEmail = FirebaseAuth.instance.currentUser!.email;
     String? myUserId = FirebaseAuth.instance.currentUser!.uid;
+    UserData userData;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -42,187 +50,107 @@ class MyPage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.deepPurple[100],
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('tweets')
-            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .orderBy('createdAt', descending: true)
-            .snapshots(),
-        builder: (context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // データのロード中はローディング状態を表示
-            return const SizedBox.shrink();
-          } else if (snapshot.hasError) {
-            // エラーが発生した場合はエラーメッセージを表示
-            return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            // データがない場合は「ないよ」を表示
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: StreamBuilder<Object>(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(myUserId)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const SizedBox.shrink();
-                        }
-                        if (snapshot.hasData == false) {
-                          return const SizedBox.shrink();
-                        }
-                        final DocumentSnapshot<Map<String, dynamic>>?
-                            documentSnapshot = snapshot.data
-                                as DocumentSnapshot<Map<String, dynamic>>?;
-                        if (documentSnapshot == null ||
-                            !documentSnapshot.exists) {
-                          // ドキュメントが存在しない場合の処理
-                          return const SizedBox.shrink();
-                        }
-                        final Map<String, dynamic> userDataMap =
-                            documentSnapshot.data()!;
-                        final UserData userData =
-                            UserData.fromJson(userDataMap);
+      body: ListView(
+        children: [
+          MarginSizedBox.mediumHeightMargin,
+          StreamBuilder<Object>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(myUserId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox.shrink();
+                }
+                if (snapshot.hasData == false) {
+                  return const SizedBox.shrink();
+                }
+                final DocumentSnapshot<Map<String, dynamic>>? documentSnapshot =
+                    snapshot.data as DocumentSnapshot<Map<String, dynamic>>?;
+                if (documentSnapshot == null || !documentSnapshot.exists) {
+                  // ドキュメントが存在しない場合の処理
+                  return const SizedBox.shrink();
+                }
+                final Map<String, dynamic> userDataMap =
+                    documentSnapshot.data()!;
+                userData = UserData.fromJson(userDataMap);
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (userData.imageUrl != '')
-                              ClipOval(
-                                child: Image.network(
-                                  userData.imageUrl,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            else
-                              ClipOval(
-                                child: Image.asset(
-                                  'assets/images/default_user_icon.png',
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            MarginSizedBox.smallHeightMargin,
-                            Text(
-                              userData.userName,
-                              style: CustomFontSize.bigFontSize,
-                            ),
-                            MarginSizedBox.smallHeightMargin,
-                            Text(myUserEmail ?? ''),
-                            MarginSizedBox.miniHeightMargin,
-                            Text(
-                              userData.profileIntroduction,
-                              style: CustomFontSize.mediumFontSize,
-                            ),
-                            MarginSizedBox.mediumHeightMargin,
-                          ],
-                        );
-                      }),
-                ),
-              ),
-            );
-          }
-          // 目標形： [{}, {}, {}]
-          // 現在：   ⭕️💎[{}, {}, {}]💎⭕️
-          final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-              snapshot.data!;
-          // 現在：   💎[{}, {}, {}]💎
-          final List<QueryDocumentSnapshot<Map<String, dynamic>>> listData =
-              querySnapshot.docs;
-          // 現在：   [🐶{}🐶, 🐶{}🐶, 🐶{}🐶]
-          return ListView.builder(
-            cacheExtent: 250.0 * 10.0,
-            itemCount: listData.length,
-            itemBuilder: (context, index) {
-              final QueryDocumentSnapshot<Map<String, dynamic>>
-                  queryDocumentSnapshot = listData[index];
-              Map<String, dynamic> mapData = queryDocumentSnapshot.data();
-              // ゴール！： [{}, {}, {}]
-              TweetData tweetData = TweetData.fromJson(mapData);
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    (index == 0)
-                        ? StreamBuilder<Object>(
-                            stream: FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(myUserId)
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const SizedBox.shrink();
-                              }
-                              if (snapshot.hasData == false) {
-                                return const SizedBox.shrink();
-                              }
-                              final DocumentSnapshot<Map<String, dynamic>>?
-                                  documentSnapshot = snapshot.data
-                                      as DocumentSnapshot<
-                                          Map<String, dynamic>>?;
-                              if (documentSnapshot == null ||
-                                  !documentSnapshot.exists) {
-                                // ドキュメントが存在しない場合の処理
-                                return const SizedBox.shrink();
-                              }
-                              final Map<String, dynamic> userDataMap =
-                                  documentSnapshot.data()!;
-                              final UserData userData =
-                                  UserData.fromJson(userDataMap);
-
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  if (userData.imageUrl != '')
-                                    ClipOval(
-                                      child: Image.network(
-                                        userData.imageUrl,
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  else
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'assets/images/default_user_icon.png',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  MarginSizedBox.smallHeightMargin,
-                                  Text(
-                                    userData.userName,
-                                    style: CustomFontSize.bigFontSize,
-                                  ),
-                                  MarginSizedBox.smallHeightMargin,
-                                  Text(myUserEmail ?? ''),
-                                  MarginSizedBox.miniHeightMargin,
-                                  Text(
-                                    userData.profileIntroduction,
-                                    style: CustomFontSize.mediumFontSize,
-                                  ),
-                                  MarginSizedBox.mediumHeightMargin,
-                                ],
-                              );
-                            })
-                        : const SizedBox.shrink(),
-                    FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                        future: FirebaseFirestore.instance
+                    if (userData.imageUrl != '')
+                      ClipOval(
+                        child: Image.network(
+                          userData.imageUrl,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    else
+                      ClipOval(
+                        child: Image.asset(
+                          'assets/images/default_user_icon.png',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    MarginSizedBox.smallHeightMargin,
+                    Text(
+                      userData.userName,
+                      style: CustomFontSize.bigFontSize,
+                    ),
+                    MarginSizedBox.smallHeightMargin,
+                    Text(myUserEmail ?? ''),
+                    MarginSizedBox.miniHeightMargin,
+                    Text(
+                      userData.profileIntroduction,
+                      style: CustomFontSize.mediumFontSize,
+                    ),
+                    MarginSizedBox.mediumHeightMargin,
+                  ],
+                );
+              }),
+          StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('tweets')
+                .where('userId',
+                    isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                .orderBy('createdAt', descending: true)
+                .snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.hasData == false || snapshot.data == null) {
+                return const SizedBox.shrink();
+              }
+              // 目標形： [{}, {}, {}]
+              // 現在：   ⭕️💎[{}, {}, {}]💎⭕️
+              final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                  snapshot.data!;
+              // 現在：   💎[{}, {}, {}]💎
+              final List<QueryDocumentSnapshot<Map<String, dynamic>>> listData =
+                  querySnapshot.docs;
+              // 現在：   [🐶{}🐶, 🐶{}🐶, 🐶{}🐶]
+              return ListView.builder(
+                shrinkWrap: true, //追加
+                physics: const NeverScrollableScrollPhysics(), //追加
+                itemCount: listData.length,
+                itemBuilder: (context, index) {
+                  final QueryDocumentSnapshot<Map<String, dynamic>>
+                      queryDocumentSnapshot = listData[index];
+                  Map<String, dynamic> mapData = queryDocumentSnapshot.data();
+                  // ゴール！： [{}, {}, {}]
+                  TweetData tweetData = TweetData.fromJson(mapData);
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
                             .collection('users')
                             .doc(tweetData.userId)
-                            .get(),
+                            .snapshots(),
                         builder: (context, userSnapshot) {
+                          // print(userSnapshot);
                           if (userSnapshot.connectionState ==
                               ConnectionState.waiting) {
                             return const SizedBox.shrink();
@@ -231,6 +159,7 @@ class MyPage extends StatelessWidget {
                           if (userSnapshot.hasError) {
                             return Text('Error: ${userSnapshot.error}');
                           }
+
                           final DocumentSnapshot<Map<String, dynamic>>
                               documentSnapshot = userSnapshot.data!;
                           final Map<String, dynamic> userMap =
@@ -285,64 +214,67 @@ class MyPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  IconButton(
-                                    onPressed: () {
-                                      showConfirmDialog(
-                                          context: context,
-                                          text: '本当に削除しますか？',
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-                                            await FirebaseFirestore.instance
-                                                .collection('tweets')
-                                                .doc(tweetData.tweetId)
-                                                .delete();
-                                            bottomShowToast('削除成功しました');
-                                          });
-                                    },
-                                    icon: const Icon(
-                                      Icons.close,
-                                      color: Colors.deepPurple,
-                                    ),
-                                  ),
+                                  (tweetData.userId ==
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                      ? IconButton(
+                                          onPressed: () {
+                                            showConfirmDialog(
+                                                context: context,
+                                                text: '本当に削除しますか？',
+                                                onPressed: () async {
+                                                  Navigator.pop(context);
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection('tweets')
+                                                      .doc(tweetData.tweetId)
+                                                      .delete();
+                                                  bottomShowToast('削除成功しました');
+                                                });
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.deepPurple,
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
                                 ],
                               ),
                               MarginSizedBox.miniHeightMargin,
                               Container(
                                 // ignore: sort_child_properties_last
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    children: [
-                                      (tweetData.addedImageUrl.isNotEmpty)
-                                          ? Row(
-                                              children: [
-                                                Image.network(
-                                                  tweetData.addedImageUrl,
-                                                  width: 75,
-                                                  height: 75,
-                                                  fit: BoxFit.scaleDown,
-                                                ),
-                                                MarginSizedBox.smallWidthMargin,
-                                              ],
-                                            )
-                                          : const SizedBox.shrink(),
-                                      Expanded(
-                                          child: Text(tweetData.tweetContent)),
-                                    ],
-                                  ),
+                                child: Row(
+                                  children: [
+                                    (tweetData.addedImageUrl.isNotEmpty)
+                                        ? Row(
+                                            children: [
+                                              Image.network(
+                                                tweetData.addedImageUrl,
+                                                width: 75,
+                                                height: 75,
+                                                fit: BoxFit.scaleDown,
+                                              ),
+                                              MarginSizedBox.smallWidthMargin,
+                                            ],
+                                          )
+                                        : const SizedBox.shrink(),
+                                    Expanded(
+                                        child: Text(tweetData.tweetContent)),
+                                  ],
                                 ),
                                 width: double.infinity,
                                 color: Colors.white,
+                                padding: const EdgeInsets.all(16.0),
                               ),
                             ],
                           );
                         }),
-                  ],
-                ),
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ],
       ),
       drawer: StreamBuilder<Object>(
           stream: FirebaseFirestore.instance
@@ -378,13 +310,14 @@ class MyPage extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
-                      onTap: () {
+                      onTap: () async {
                         Navigator.pop(context); // Drawerを閉じる
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const EditEmailPage()),
                         );
+                        setState(() {});
                       },
                     ),
                     MarginSizedBox.mediumHeightMargin,
@@ -419,7 +352,25 @@ class MyPage extends StatelessWidget {
                     MarginSizedBox.mediumHeightMargin,
                     ListTile(
                       title: const Text(
-                        'プロフィール編集',
+                        'プロフィールアイコン編集',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return EditIconPage(
+                              imageUrl: userData.imageUrl,
+                            );
+                          }),
+                        );
+                      },
+                    ),
+                    MarginSizedBox.mediumHeightMargin,
+                    ListTile(
+                      title: const Text(
+                        'ユーザーネーム・\nプロフィール文章編集',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -429,7 +380,6 @@ class MyPage extends StatelessWidget {
                           MaterialPageRoute(builder: (context) {
                             return EditProfilePage(
                               userName: userData.userName,
-                              imageUrl: userData.imageUrl,
                               profileIntroduction: userData.profileIntroduction,
                             );
                           }),

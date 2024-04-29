@@ -145,8 +145,8 @@ class TodoAllListPage extends StatelessWidget {
                             ],
                           ),
                           MarginSizedBox.miniHeightMargin,
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
+                          Container(
+                            // ignore: sort_child_properties_last
                             child: Row(
                               children: [
                                 (tweetData.addedImageUrl.isNotEmpty)
@@ -165,6 +165,9 @@ class TodoAllListPage extends StatelessWidget {
                                 Expanded(child: Text(tweetData.tweetContent)),
                               ],
                             ),
+                            width: double.infinity,
+                            color: Colors.white,
+                            padding: const EdgeInsets.all(16.0),
                           ),
                         ],
                       );
