@@ -143,6 +143,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         validator: (value) {
                           if (value == null || value == '') {
                             return '未入力です';
+                          } else if (value.trim().isEmpty) {
+                            return 'ツイート内容を入力してください';
                           }
                           return null;
                         },
@@ -156,6 +158,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         validator: (value) {
                           if (value == null || value == '') {
                             return '未入力です';
+                          } else if (value.trim().isEmpty) {
+                            return 'ツイート内容を入力してください';
                           }
                           return null;
                         },

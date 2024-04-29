@@ -17,7 +17,7 @@ class AddTweetPage extends StatefulWidget {
 }
 
 class _AddTweetPageState extends State<AddTweetPage> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController tweetContentController = TextEditingController();
   File? image;
 
@@ -35,7 +35,7 @@ class _AddTweetPageState extends State<AddTweetPage> {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
-          key: formKey,
+          key: formkey,
           child: ListView(
             children: [
               Row(
@@ -52,7 +52,7 @@ class _AddTweetPageState extends State<AddTweetPage> {
                   SmallBlueButton(
                     buttonText: 'ツイート',
                     onBlueButtonPressed: () async {
-                      if (formKey.currentState!.validate() == false) {
+                      if (formkey.currentState!.validate() == false) {
                         return;
                       }
                       final String uuid = const Uuid().v4();
@@ -90,13 +90,16 @@ class _AddTweetPageState extends State<AddTweetPage> {
                   ),
                 ],
               ),
+              MarginSizedBox.smallHeightMargin,
               TextFormField(
                 controller: tweetContentController,
                 maxLength: 140,
                 maxLines: 7,
                 validator: (value) {
-                  if (value == null || value == '') {
+                  if (value == null || value.isEmpty) {
                     return '未入力です';
+                  } else if (value.trim().isEmpty) {
+                    return 'ツイート内容を入力してください';
                   }
                   return null;
                 },
