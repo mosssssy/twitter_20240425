@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
@@ -228,6 +229,10 @@ class _MyPageState extends State<MyPage> {
                                                       .instance
                                                       .collection('tweets')
                                                       .doc(tweetData.tweetId)
+                                                      .delete();
+                                                  await FirebaseStorage.instance
+                                                      .ref(
+                                                          'addedImage/$tweetData.tweetId')
                                                       .delete();
                                                   bottomShowToast('削除成功しました');
                                                 });

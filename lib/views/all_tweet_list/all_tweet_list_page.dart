@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twitter_20240425/common_widget/confirm_dialog.dart';
@@ -129,9 +130,9 @@ class TodoAllListPage extends StatelessWidget {
                                             text: '本当に削除しますか？',
                                             onPressed: () async {
                                               Navigator.pop(context);
-                                              await FirebaseFirestore.instance
-                                                  .collection('tweets')
-                                                  .doc(tweetData.tweetId)
+                                              await FirebaseStorage.instance
+                                                  .ref(
+                                                      'addedImage/$tweetData.tweetId')
                                                   .delete();
                                               bottomShowToast('削除成功しました');
                                             });
