@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:twitter_20240425/views/my_page/my_page.dart';
 import 'package:twitter_20240425/views/all_tweet_list/all_tweet_list_page.dart';
 
-class BottomNavigationPage extends StatelessWidget {
-  BottomNavigationPage({super.key});
+class BottomNavigationPage extends StatefulWidget {
+  const BottomNavigationPage({super.key});
 
-  List children = [
+  @override
+  State<BottomNavigationPage> createState() => _BottomNavigationPageState();
+}
+
+class _BottomNavigationPageState extends State<BottomNavigationPage> {
+  final childrenPageList = [
     const TodoAllListPage(),
     const MyPage(),
   ];
@@ -17,10 +22,15 @@ class BottomNavigationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: children[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: childrenPageList,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (int value) {
-          currentIndex = value;
+          setState(() {
+            currentIndex = value;
+          });
         },
         currentIndex: currentIndex,
         items: const [

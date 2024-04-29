@@ -43,7 +43,7 @@ class TodoAllListPage extends StatelessWidget {
               querySnapshot.docs;
           // 現在：   [🐶{}🐶, 🐶{}🐶, 🐶{}🐶]
           return ListView.builder(
-            cacheExtent: 250.0 * 10.0,
+            cacheExtent: 250.0 * 20.0,
             itemCount: listData.length,
             itemBuilder: (context, index) {
               final QueryDocumentSnapshot<Map<String, dynamic>>
@@ -158,7 +158,7 @@ class TodoAllListPage extends StatelessWidget {
                                               tweetData.addedImageUrl,
                                               width: 75,
                                               height: 75,
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.scaleDown,
                                             ),
                                             MarginSizedBox.smallWidthMargin,
                                           ],
