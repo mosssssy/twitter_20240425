@@ -23,22 +23,6 @@ class _AddTweetPageState extends State<AddTweetPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget previewWidget;
-    if (image != null) {
-      previewWidget = Image.file(
-        image!,
-        width: 200,
-        height: 200,
-        fit: BoxFit.cover,
-      );
-    } else {
-      previewWidget = Container(
-        width: 200,
-        height: 200,
-        color: Colors.grey,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -77,7 +61,12 @@ class _AddTweetPageState extends State<AddTweetPage> {
                 },
               ),
               MarginSizedBox.smallHeightMargin,
-              previewWidget,
+              (image != null)
+                  ? Image.file(
+                      image!,
+                      fit: BoxFit.cover,
+                    )
+                  : const SizedBox.shrink(),
               MarginSizedBox.bigHeightMargin,
               BlueButton(
                 buttonText: 'ツイートを追加する',
