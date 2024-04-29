@@ -67,8 +67,8 @@ class _AddTweetPageState extends State<AddTweetPage> {
                             .set({
                           'tweetContent': tweetContentController.text,
                           'userId': FirebaseAuth.instance.currentUser!.uid,
-                          'createdAt': FieldValue.serverTimestamp(),
-                          'updatedAt': FieldValue.serverTimestamp(),
+                          'createdAt': DateTime.now(),
+                          'updatedAt': DateTime.now(),
                           'addedImageUrl': "",
                           'tweetId': uuid,
                         });
