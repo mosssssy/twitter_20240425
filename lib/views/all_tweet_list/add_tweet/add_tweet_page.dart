@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
 import 'package:twitter_20240425/views/my_page/components/small_blue_button.dart';
 import 'package:uuid/uuid.dart';
@@ -96,22 +97,12 @@ class _AddTweetPageState extends State<AddTweetPage> {
                   ],
                 ),
                 MarginSizedBox.smallHeightMargin,
-                TextFormField(
-                  controller: tweetContentController,
-                  maxLength: 140,
-                  maxLines: 7,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '未入力です';
-                    } else if (value.trim().isEmpty) {
-                      return 'ツイート内容を入力してください';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    label: Text('ツイート'),
-                  ),
-                ),
+                GonTwitterLimitedTextFormField(
+                    trimMsg: 'ツイート内容を入力してください',
+                    controller: tweetContentController,
+                    maxLength: 140,
+                    maxLines: 7,
+                    label: 'ツイート'),
                 MarginSizedBox.smallHeightMargin,
                 (image != null)
                     ? Image.file(

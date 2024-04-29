@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
@@ -40,38 +41,29 @@ class EditEmailPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   MarginSizedBox.mediumHeightMargin,
-                  TextFormField(
-                    readOnly: true,
+                  GonTwitterTextFormField(
+                    trimMsg: 'スペースは使えません',
                     controller: emailController,
-                    decoration: const InputDecoration(
-                      label: Text('今のメールアドレス'),
-                    ),
+                    maxLines: 1,
+                    label: '今のメールアドレス',
+                    readOnlyBool: true,
                   ),
                   MarginSizedBox.smallHeightMargin,
-                  TextFormField(
+                  GonTwitterTextFormField(
+                    trimMsg: 'スペースは使えません',
                     controller: newEmailController,
-                    decoration: const InputDecoration(
-                      label: Text('新しいメールアドレス'),
-                    ),
-                    validator: (value) {
-                      if (value == null || value == '') {
-                        return '未入力です';
-                      }
-                      return null;
-                    },
+                    maxLines: 1,
+                    label: '新しいメールアドレス',
+                    readOnlyBool: false,
                   ),
                   MarginSizedBox.smallHeightMargin,
-                  TextFormField(
-                      controller: passController,
-                      decoration: const InputDecoration(
-                        label: Text('パスワード'),
-                      ),
-                      validator: (value) {
-                        if (value == null || value == '') {
-                          return '未入力です';
-                        }
-                        return null;
-                      }),
+                  GonTwitterTextFormField(
+                    trimMsg: 'スペースは使えません',
+                    controller: passController,
+                    maxLines: 1,
+                    label: 'パスワード',
+                    readOnlyBool: false,
+                  ),
                   MarginSizedBox.bigHeightMargin,
                   BlueButton(
                     buttonText: 'メールアドレス変更',

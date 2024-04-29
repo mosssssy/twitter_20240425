@@ -24,6 +24,7 @@ mixin _$UserData {
   String get imageUrl => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get profileIntroduction => throw _privateConstructorUsedError;
+  String get userEmail => throw _privateConstructorUsedError;
   @TimestampConverter()
   Timestamp get createdAt => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -45,6 +46,7 @@ abstract class $UserDataCopyWith<$Res> {
       String imageUrl,
       String userId,
       String profileIntroduction,
+      String userEmail,
       @TimestampConverter() Timestamp createdAt,
       @TimestampConverter() Timestamp updatedAt});
 }
@@ -66,6 +68,7 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
     Object? imageUrl = null,
     Object? userId = null,
     Object? profileIntroduction = null,
+    Object? userEmail = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -85,6 +88,10 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
       profileIntroduction: null == profileIntroduction
           ? _value.profileIntroduction
           : profileIntroduction // ignore: cast_nullable_to_non_nullable
+              as String,
+      userEmail: null == userEmail
+          ? _value.userEmail
+          : userEmail // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -111,6 +118,7 @@ abstract class _$$UserDataImplCopyWith<$Res>
       String imageUrl,
       String userId,
       String profileIntroduction,
+      String userEmail,
       @TimestampConverter() Timestamp createdAt,
       @TimestampConverter() Timestamp updatedAt});
 }
@@ -130,6 +138,7 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? imageUrl = null,
     Object? userId = null,
     Object? profileIntroduction = null,
+    Object? userEmail = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -149,6 +158,10 @@ class __$$UserDataImplCopyWithImpl<$Res>
       profileIntroduction: null == profileIntroduction
           ? _value.profileIntroduction
           : profileIntroduction // ignore: cast_nullable_to_non_nullable
+              as String,
+      userEmail: null == userEmail
+          ? _value.userEmail
+          : userEmail // ignore: cast_nullable_to_non_nullable
               as String,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -170,6 +183,7 @@ class _$UserDataImpl implements _UserData {
       required this.imageUrl,
       required this.userId,
       required this.profileIntroduction,
+      required this.userEmail,
       @TimestampConverter() required this.createdAt,
       @TimestampConverter() required this.updatedAt});
 
@@ -185,6 +199,8 @@ class _$UserDataImpl implements _UserData {
   @override
   final String profileIntroduction;
   @override
+  final String userEmail;
+  @override
   @TimestampConverter()
   final Timestamp createdAt;
   @override
@@ -193,7 +209,7 @@ class _$UserDataImpl implements _UserData {
 
   @override
   String toString() {
-    return 'UserData(userName: $userName, imageUrl: $imageUrl, userId: $userId, profileIntroduction: $profileIntroduction, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserData(userName: $userName, imageUrl: $imageUrl, userId: $userId, profileIntroduction: $profileIntroduction, userEmail: $userEmail, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -208,6 +224,8 @@ class _$UserDataImpl implements _UserData {
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.profileIntroduction, profileIntroduction) ||
                 other.profileIntroduction == profileIntroduction) &&
+            (identical(other.userEmail, userEmail) ||
+                other.userEmail == userEmail) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -217,7 +235,7 @@ class _$UserDataImpl implements _UserData {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, userName, imageUrl, userId,
-      profileIntroduction, createdAt, updatedAt);
+      profileIntroduction, userEmail, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -239,6 +257,7 @@ abstract class _UserData implements UserData {
           required final String imageUrl,
           required final String userId,
           required final String profileIntroduction,
+          required final String userEmail,
           @TimestampConverter() required final Timestamp createdAt,
           @TimestampConverter() required final Timestamp updatedAt}) =
       _$UserDataImpl;
@@ -254,6 +273,8 @@ abstract class _UserData implements UserData {
   String get userId;
   @override
   String get profileIntroduction;
+  @override
+  String get userEmail;
   @override
   @TimestampConverter()
   Timestamp get createdAt;

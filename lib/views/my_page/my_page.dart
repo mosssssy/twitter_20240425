@@ -9,7 +9,7 @@ import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/data_models/userdata/userdata.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
-import 'package:twitter_20240425/views/my_page/edit_email/edit_email.dart';
+import 'package:twitter_20240425/views/my_page/edit_email/edit_email_page.dart';
 import 'package:twitter_20240425/views/my_page/edit_profile/edit_profile_page.dart';
 
 class MyPage extends StatelessWidget {
@@ -60,7 +60,7 @@ class MyPage extends StatelessWidget {
             // データがない場合は「ないよ」を表示
             return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   width: double.infinity,
                   child: StreamBuilder<Object>(

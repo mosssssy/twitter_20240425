@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
@@ -35,18 +36,12 @@ class PasswordReminderPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MarginSizedBox.bigHeightMargin,
-                  TextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (value == null || value == '') {
-                        return '未入力です';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      label: Text('メールアドレス'),
-                    ),
-                  ),
+                  GonTwitterTextFormField(
+                      trimMsg: 'スペースは使えません',
+                      controller: emailController,
+                      maxLines: 1,
+                      readOnlyBool: false,
+                      label: 'メールアドレス'),
                   MarginSizedBox.bigHeightMargin,
                   ElevatedButton(
                     onPressed: () async {

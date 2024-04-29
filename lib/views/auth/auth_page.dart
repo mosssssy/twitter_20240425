@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
-import 'package:twitter_20240425/views/auth/components/auth_text_form_field.dart';
+import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
 import 'package:twitter_20240425/views/auth/password_reminder_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -40,15 +40,18 @@ class AuthPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MarginSizedBox.bigHeightMargin,
-                  AuthTextFormField(
-                    controller: emailController,
-                    label: 'メールアドレス',
-                  ),
-                  MarginSizedBox.smallHeightMargin,
-                  AuthTextFormField(
-                    controller: passController,
-                    label: 'パスワード',
-                  ),
+                  GonTwitterTextFormField(
+                      trimMsg: 'スペースは使えません',
+                      controller: emailController,
+                      maxLines: 1,
+                      readOnlyBool: false,
+                      label: 'メールアドレス'),
+                  GonTwitterTextFormField(
+                      trimMsg: 'スペースは使えません',
+                      controller: passController,
+                      maxLines: 1,
+                      readOnlyBool: false,
+                      label: 'パスワード'),
                   SizedBox(
                     width: double.infinity,
                     child: InkWell(
@@ -91,6 +94,7 @@ class AuthPage extends StatelessWidget {
                               'userName': '',
                               'imageUrl': '',
                               'userId': user.uid,
+                              'userEmail': emailController.text,
                               'profileIntroduction': '',
                               'createdAt': Timestamp.now(),
                               'updatedAt': Timestamp.now(),

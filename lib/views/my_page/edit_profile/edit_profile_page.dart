@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:twitter_20240425/common_widget/auth_text_form_field.dart';
 import 'package:twitter_20240425/common_widget/close_only_dialog.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/functions/global_functions.dart';
@@ -139,34 +140,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         },
                       ),
                       MarginSizedBox.mediumHeightMargin,
-                      TextFormField(
+                      GonTwitterLimitedTextFormField(
+                          trimMsg: 'ユーザーネームを入力してください',
                           controller: userNameController,
                           maxLength: 12,
-                          validator: (value) {
-                            if (value == null || value == '') {
-                              return '未入力です';
-                            } else if (value.trim().isEmpty) {
-                              return 'ツイート内容を入力してください';
-                            }
-                            return null;
-                          },
-                          decoration:
-                              const InputDecoration(label: Text('ユーザーネーム'))),
+                          maxLines: 1,
+                          label: 'ユーザーネーム'),
                       MarginSizedBox.mediumHeightMargin,
-                      TextFormField(
-                          controller: profileIntroductionController,
-                          maxLines: 3,
+                      GonTwitterLimitedTextFormField(
+                          trimMsg: 'プロフィール文章を入力してください',
+                          controller: userNameController,
                           maxLength: 50,
-                          validator: (value) {
-                            if (value == null || value == '') {
-                              return '未入力です';
-                            } else if (value.trim().isEmpty) {
-                              return 'ツイート内容を入力してください';
-                            }
-                            return null;
-                          },
-                          decoration:
-                              const InputDecoration(label: Text('プロフィール文章'))),
+                          maxLines: 3,
+                          label: 'プロフィール文章'),
                       MarginSizedBox.mediumHeightMargin,
                       BlueButton(
                         buttonText: 'プロフィールを変更する',
@@ -232,8 +218,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         await picker.pickImage(source: ImageSource.gallery); //アルバムから画像を取得
 
     if (pickedFile != null) {
+      final String userNametextValue = userNameController.text;
+      final String profileIntroductiontextValue =
+          profileIntroductionController.text;
       setState(() {
         image = File(pickedFile.path);
+        userNameController.text = userNametextValue;
+        profileIntroductionController.text = profileIntroductiontextValue;
       });
     }
   }
