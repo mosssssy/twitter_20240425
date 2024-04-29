@@ -105,7 +105,6 @@ class MyPage extends StatelessWidget {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  MarginSizedBox.smallHeightMargin,
                                   if (userData.imageUrl != '')
                                     ClipOval(
                                       child: Image.network(
