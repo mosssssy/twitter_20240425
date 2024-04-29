@@ -145,31 +145,26 @@ class TodoAllListPage extends StatelessWidget {
                             ],
                           ),
                           MarginSizedBox.miniHeightMargin,
-                          Container(
-                            // ignore: sort_child_properties_last
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                                children: [
-                                  (tweetData.addedImageUrl.isNotEmpty)
-                                      ? Row(
-                                          children: [
-                                            Image.network(
-                                              tweetData.addedImageUrl,
-                                              width: 75,
-                                              height: 75,
-                                              fit: BoxFit.scaleDown,
-                                            ),
-                                            MarginSizedBox.smallWidthMargin,
-                                          ],
-                                        )
-                                      : const SizedBox.shrink(),
-                                  Expanded(child: Text(tweetData.tweetContent)),
-                                ],
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: [
+                                (tweetData.addedImageUrl.isNotEmpty)
+                                    ? Row(
+                                        children: [
+                                          Image.network(
+                                            tweetData.addedImageUrl,
+                                            width: 75,
+                                            height: 75,
+                                            fit: BoxFit.scaleDown,
+                                          ),
+                                          MarginSizedBox.smallWidthMargin,
+                                        ],
+                                      )
+                                    : const SizedBox.shrink(),
+                                Expanded(child: Text(tweetData.tweetContent)),
+                              ],
                             ),
-                            width: double.infinity,
-                            color: Colors.white,
                           ),
                         ],
                       );
