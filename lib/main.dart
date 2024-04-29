@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             return const SizedBox();
           }
           if (snapshot.hasData) {
-            return const BottomNavigationPage();
+            return BottomNavigationPage();
           }
           return const AuthPage();
         },
