@@ -214,6 +214,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               );
                             }
                             topShowToast('変更成功しました！');
+                            Navigator.of(context).pop();
                           } catch (error) {
                             showCloseOnlyDialog(
                                 context, error.toString(), '更新失敗しました');

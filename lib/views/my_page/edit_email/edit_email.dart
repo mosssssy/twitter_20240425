@@ -85,6 +85,7 @@ class EditEmailPage extends StatelessWidget {
                         await FirebaseAuth.instance.currentUser!
                             .verifyBeforeUpdateEmail(newEmailController.text);
                         bottomShowToast('メールアドレス変更用のメールを送信しました');
+                        Navigator.of(context).pop();
                       } on FirebaseAuthException catch (error) {
                         if (error.code == 'invalid-email') {
                           showCloseOnlyDialog(
