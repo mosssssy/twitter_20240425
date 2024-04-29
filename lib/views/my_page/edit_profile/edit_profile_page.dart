@@ -116,7 +116,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         .update(
                                       {
                                         'imageUrl': '',
-                                        'updatedAt': Timestamp.now(),
+                                        'updatedAt':
+                                            FieldValue.serverTimestamp(),
                                       },
                                     );
                                     await FirebaseStorage.instance
@@ -181,7 +182,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   'userName': userNameController.text,
                                   'profileIntroduction':
                                       profileIntroductionController.text,
-                                  'updatedAt': Timestamp.now(),
+                                  'updatedAt': FieldValue.serverTimestamp(),
                                 },
                               );
                             } else {
@@ -195,7 +196,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   'userName': userNameController.text,
                                   'profileIntroduction':
                                       profileIntroductionController.text,
-                                  'updatedAt': Timestamp.now(),
+                                  'updatedAt': FieldValue.serverTimestamp(),
                                 },
                               );
                             }

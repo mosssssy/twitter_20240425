@@ -96,8 +96,8 @@ class AuthPage extends StatelessWidget {
                               'userId': user.uid,
                               'userEmail': emailController.text,
                               'profileIntroduction': '',
-                              'createdAt': Timestamp.now(),
-                              'updatedAt': Timestamp.now(),
+                              'createdAt': FieldValue.serverTimestamp(),
+                              'updatedAt': FieldValue.serverTimestamp(),
                             });
                             AlertDialog(
                               title: const Text("会員登録成功"),
@@ -164,7 +164,7 @@ class AuthPage extends StatelessWidget {
                                 .collection('users')
                                 .doc(user.uid)
                                 .update({
-                              'updatedAt': Timestamp.now(),
+                              'updatedAt': FieldValue.serverTimestamp(),
                             });
                           } else {
                             print('ログイン失敗');
