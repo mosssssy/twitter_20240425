@@ -90,7 +90,7 @@ class AuthPage extends StatelessWidget {
                                 .set({
                               'userName': '',
                               'imageUrl': '',
-                              'userId': '',
+                              'userId': user.uid,
                               'profileIntroduction': '',
                               'createdAt': Timestamp.now(),
                               'updatedAt': Timestamp.now(),

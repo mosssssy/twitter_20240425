@@ -50,7 +50,14 @@ class MyPage extends StatelessWidget {
             .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (!snapshot.hasData || snapshot.data == null) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // データのロード中はローディング状態を表示
+            return const SizedBox.shrink();
+          } else if (snapshot.hasError) {
+            // エラーが発生した場合はエラーメッセージを表示
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            // データがない場合は「ないよ」を表示
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
