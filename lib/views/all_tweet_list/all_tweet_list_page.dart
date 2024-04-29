@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:twitter_20240425/common_widget/confirm_dialog.dart';
+import 'package:twitter_20240425/common_widget/custom_font_size.dart';
 import 'package:twitter_20240425/common_widget/margin_sizedbox.dart';
 import 'package:twitter_20240425/data_models/tweetdata/tweetdata.dart';
 import 'package:twitter_20240425/data_models/userdata/userdata.dart';
@@ -107,17 +108,13 @@ class TodoAllListPage extends StatelessWidget {
                                         postUser.userName,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
+                                        style:
+                                            CustomFontSize.boldMediumFontSize,
                                       ),
                                       Text(
                                         DateFormat('yyyy年MM月dd日 HH:mm').format(
                                             tweetData.createdAt.toDate()),
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                        ),
+                                        style: CustomFontSize.smallFontSize,
                                       ),
                                     ],
                                   ),

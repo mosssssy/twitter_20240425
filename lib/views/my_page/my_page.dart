@@ -196,18 +196,14 @@ class MyPage extends StatelessWidget {
                                             postUser.userName,
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
+                                            style: CustomFontSize
+                                                .boldMediumFontSize,
                                           ),
                                           Text(
                                             DateFormat('yyyy年MM月dd日 HH:mm')
                                                 .format(tweetData.createdAt
                                                     .toDate()),
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                            ),
+                                            style: CustomFontSize.smallFontSize,
                                           ),
                                         ],
                                       ),
